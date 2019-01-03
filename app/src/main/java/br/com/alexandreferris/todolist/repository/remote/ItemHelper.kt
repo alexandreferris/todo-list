@@ -66,9 +66,9 @@ class ItemHelper(context: Context): DBHelper(context) {
         return (count > 0)
     }
 
-    fun getItem(itemID: Long): Item {
+    fun getItem(itemId: Long): Item {
         val where = ItemColumns.COLUMN_ID + " = ?"
-        val whereArgs = arrayOf(itemID.toString())
+        val whereArgs = arrayOf(itemId.toString())
 
         val sortOrder = ItemColumns.COLUMN_ID + " ASC"
 
@@ -94,6 +94,22 @@ class ItemHelper(context: Context): DBHelper(context) {
         cursor.close()
 
         return item
+    }
+
+    /**
+     * Removes an item from the database and returns true if one or more items has been removed
+     * @param itemId: Long
+     * @return Boolean
+     */
+    fun removeItem(itemId: Long): Boolean {
+        // Define 'where' part of query.
+        val selection = "${ItemColumns.COLUMN_ID} = ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(itemId.toString())
+        // Issue SQL statement.
+        val deletedRows = this.writableDatabase.delete(ItemColumns.TABLE_NAME, selection, selectionArgs)
+
+        return (deletedRows > 0)
     }
 
     /**

@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.Toast
 import br.com.alexandreferris.todolist.R
-import br.com.alexandreferris.todolist.helper.adapter.ItemAdapter
-import br.com.alexandreferris.todolist.helper.constants.ActivityForResultEnum
+import br.com.alexandreferris.todolist.util.adapter.ItemAdapter
+import br.com.alexandreferris.todolist.util.alert.ItemRemoveDialog
+import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
 import br.com.alexandreferris.todolist.viewmodel.MainVM
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -39,8 +39,11 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
         // Handling Item Listing
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ItemAdapter { itemID ->
-            showAddNewItemScreen(itemID)
+        viewAdapter = ItemAdapter { itemId, delete ->
+            if (delete)
+                showDeleteItemAlert(itemId)
+            else
+                showAddNewItemScreen(itemId)
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.rvItems).apply {
@@ -67,6 +70,18 @@ class Main : AppCompatActivity(), View.OnClickListener {
         addNewItemScreen.putExtra("ITEM_ID", itemID)
 
         startActivityForResult(addNewItemScreen, ActivityForResultEnum.ADD_OR_EDIT_ITEM)
+    }
+
+    fun showDeleteItemAlert(itemId: Long) {
+        val item = mainVM.getItem(itemId)
+        val itemRemoveDialog = ItemRemoveDialog()
+        itemRemoveDialog.item = item
+        itemRemoveDialog.show(this@Main.supportFragmentManager, ActivityForResultEnum.ITEM_REMOVE_DIALOG)
+    }
+
+    fun removeItem(itemId: Long) {
+        if (mainVM.removeItem(itemId))
+            mainVM.loadItems()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

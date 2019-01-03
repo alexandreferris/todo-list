@@ -21,4 +21,12 @@ open class MainVM(context: Context): BaseVM() {
 
         return itemList
     }
+
+    fun getItem(itemId: Long): Item {
+        return itemHelper.getItem(itemId)
+    }
+
+    fun removeItem(itemId: Long): Boolean {
+        return itemHelper.removeItem(itemId)
+    }
 }

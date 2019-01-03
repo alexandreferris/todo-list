@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">Todo List</string>
 
+    <string name="lbl_title">Title</string>
+    <string name="lbl_category">Category</string>
+    <string name="lbl_description">Description</string>
+
+    <string name="btn_save">Save</string>
+
     <string name="error_save_item">Error!\nCouldn\'t save the item. Please try again.</string>
     <string name="success_save_item">Success!\nItem saved!</string>
+
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="item_remove">Are you sure you want to remove: [item_name] ?</string>
 </resources>

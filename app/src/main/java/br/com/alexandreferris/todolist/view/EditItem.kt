@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.View
 import br.com.alexandreferris.todolist.R
-import br.com.alexandreferris.todolist.helper.constants.ActivityForResultEnum
+import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
 import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.viewmodel.EditItemVM
 import kotlinx.android.synthetic.main.activity_edit_item.*
@@ -67,9 +67,9 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             itemCreatedOrEdited = editItemVM.updateItem(item)
 
         if (itemCreatedOrEdited) {
-            Snackbar.make(findViewById(R.id.clEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.rlEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
         } else
-            Snackbar.make(findViewById(R.id.clEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onClick(view: View?) {
