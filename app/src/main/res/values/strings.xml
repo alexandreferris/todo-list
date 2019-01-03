@@ -15,4 +15,5 @@
     <string name="no">No</string>
 
     <string name="item_remove">Are you sure you want to remove: [item_name] ?</string>
+    <string name="success_remove_item">Success!\nItem removed.</string>
 </resources>

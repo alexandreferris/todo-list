@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -80,8 +81,12 @@ class Main : AppCompatActivity(), View.OnClickListener {
     }
 
     fun removeItem(itemId: Long) {
-        if (mainVM.removeItem(itemId))
+        if (mainVM.removeItem(itemId)) {
+            Snackbar.make(findViewById(R.id.clMain), R.string.success_remove_item, Snackbar.LENGTH_LONG).show()
             mainVM.loadItems()
+        } else {
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
