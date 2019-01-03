@@ -4,20 +4,15 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.Nullable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
+import android.widget.Toast
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.helper.adapter.ItemAdapter
 import br.com.alexandreferris.todolist.helper.constants.ActivityForResultEnum
-import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.viewmodel.MainVM
 import kotlinx.android.synthetic.main.activity_main.*
-import android.R.attr.keySet
-
-
 
 class Main : AppCompatActivity(), View.OnClickListener {
 
@@ -25,7 +20,6 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     // RecyclerView
     private lateinit var recyclerView: RecyclerView
-    // private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewAdapter: ItemAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -36,29 +30,18 @@ class Main : AppCompatActivity(), View.OnClickListener {
         initFields()
     }
 
-    var itemListObserver: Observer<ArrayList<Item>> = Observer { t ->
-        viewAdapter.setItemList(t!!)
-    }
-
-    /*
-    var itemListObserver: Observer<ArrayList<Item>> = Observer<ArrayList<Item>>() {
-        fun onChanged(@Nullable items: ArrayList<Item>) {
-            // Update UI
-            viewAdapter.setItemList(items)
-        }
-    }
-    */
-
     private fun initFields() {
         // ViewModel
         mainVM = MainVM(this)
 
-        // Button Click
+        // Button Click Listener
         fabAddNewItem.setOnClickListener(this)
 
         // Handling Item Listing
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ItemAdapter()
+        viewAdapter = ItemAdapter { itemID ->
+            showAddNewItemScreen(itemID)
+        }
 
         recyclerView = findViewById<RecyclerView>(R.id.rvItems).apply {
             // use this setting to improve performance if you know that changes
@@ -70,22 +53,18 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
 
-        // mainVM.getItems().observe(this, itemListObserver)
-        mainVM.getItems().observe(this, itemListObserver)
+        // Get Items List with Observer
+        mainVM.getItems().observe(this, Observer { itemList ->
+                viewAdapter.setItemList(itemList!!)
+                viewAdapter.notifyDataSetChanged()
+        })
     }
 
-    private fun showAddNewItemScreen(position: Int?) {
+    private fun showAddNewItemScreen(itemID: Long?) {
         val addNewItemScreen = Intent(this, EditItem::class.java)
-        addNewItemScreen.putExtra(
-                "ITEM_ID",
-                if (position != null)
-                    viewAdapter.getItemId(position)
-                else
-                    null
-        )
+        addNewItemScreen.putExtra("ITEM_ID", itemID)
 
         startActivityForResult(addNewItemScreen, ActivityForResultEnum.ADD_OR_EDIT_ITEM)
     }

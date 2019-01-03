@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import br.com.alexandreferris.todolist.model.Item
+import org.apache.commons.lang3.math.NumberUtils
 
 
 class ItemHelper(context: Context): DBHelper(context) {
@@ -38,6 +39,61 @@ class ItemHelper(context: Context): DBHelper(context) {
         val newRowId = this.writableDatabase.insert(ItemColumns.TABLE_NAME, null, values)
 
         return (newRowId > 0)
+    }
+
+    /**
+     * Updates the item in the database
+     * @param Item
+     * @return Boolean
+     */
+    fun updateItem(item: Item): Boolean {
+        // New value for one column
+        val values = ContentValues().apply {
+            put(ItemColumns.COLUMN_TITLE, item.title)
+            put(ItemColumns.COLUMN_DESCRIPTION, item.description)
+            put(ItemColumns.COLUMN_CATEGORY, item.category)
+        }
+
+        // Which row to update, based on the title
+        val selection = "${ItemColumns.COLUMN_ID} = ?"
+        val selectionArgs = arrayOf(item.id.toString())
+        val count = this.writableDatabase.update(
+                ItemColumns.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs)
+
+        return (count > 0)
+    }
+
+    fun getItem(itemID: Long): Item {
+        val where = ItemColumns.COLUMN_ID + " = ?"
+        val whereArgs = arrayOf(itemID.toString())
+
+        val sortOrder = ItemColumns.COLUMN_ID + " ASC"
+
+        val cursor = this.readableDatabase.query(
+                ItemColumns.TABLE_NAME, // The table to query
+                allColumnsProjection, // The array of columns to return (pass null to get all)
+                where, // The columns for the WHERE clause
+                whereArgs, // don't group the rows
+                null, null, // don't filter by row groups
+                sortOrder, // The sort order
+                NumberUtils.INTEGER_ONE.toString()
+        )
+
+
+        var item: Item = Item()
+        while (cursor.moveToNext()) {
+            item = Item(
+                    cursor.getLong(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_TITLE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)))
+        }
+        cursor.close()
+
+        return item
     }
 
     /**
@@ -103,6 +159,13 @@ class ItemHelper(context: Context): DBHelper(context) {
                 "${ItemColumns.COLUMN_DESCRIPTION} TEXT," +
                 "${ItemColumns.COLUMN_CATEGORY} TEXT)"
 
-        const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"
+        private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"
+
+
+        private val allColumnsProjection = arrayOf(
+                ItemColumns.COLUMN_ID,
+                ItemColumns.COLUMN_TITLE,
+                ItemColumns.COLUMN_DESCRIPTION,
+                ItemColumns.COLUMN_CATEGORY)
     }
 }

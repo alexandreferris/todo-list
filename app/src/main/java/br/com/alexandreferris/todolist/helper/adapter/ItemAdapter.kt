@@ -1,5 +1,6 @@
 package br.com.alexandreferris.todolist.helper.adapter
 
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,7 @@ import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.model.Item
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class ItemAdapter: RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
-
+class ItemAdapter(val listener: (Long) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
     private var itemList: ArrayList<Item> = ArrayList<Item>()
 
     // Provide a reference to the views for each data item
@@ -20,15 +20,21 @@ class ItemAdapter: RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
     // class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
     class MyViewHolder(val view: View): RecyclerView.ViewHolder(view)
 
+    fun <T : RecyclerView.ViewHolder> T.listen(event: (position: Int) -> Unit): T {
+        itemView.setOnClickListener {
+            event.invoke(getAdapterPosition())
+        }
+        return this
+    }
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.MyViewHolder {
         // create a new view
-        // val textView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false) as TextView
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false) as View
-        // set the view's size, margins, paddings and layout parameters
-        // ...
-        return MyViewHolder(view)
+
+        return MyViewHolder(view).listen { pos ->
+            listener.invoke(itemList[pos].id)
+        }
     }
 
     // Replace the contents of a view (invoked by the layout manager)
