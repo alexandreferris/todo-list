@@ -8,8 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:colorBackground">@color/white</item>
-    </style>
 
-    <!-- ActionMode Toolbar -->
+        <item name="android:fontFamily">@font/carme</item>
+    </style>
 
 </resources>

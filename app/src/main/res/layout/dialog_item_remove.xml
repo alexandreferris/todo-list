@@ -8,10 +8,10 @@
         android:id="@+id/txtItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:typeface="sans"
-        android:textColor="@color/colorAccent"
+        android:fontFamily="@font/carme"
+        android:text="@string/item_remove"
         android:textAlignment="center"
-        android:text="@string/item_remove" />
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
 
 </LinearLayout>
