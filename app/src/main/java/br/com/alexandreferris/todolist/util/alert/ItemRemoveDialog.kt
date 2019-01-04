@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
+import android.text.Html
 import android.widget.TextView
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.model.Item
@@ -22,7 +23,8 @@ open class ItemRemoveDialog: AppCompatDialogFragment, DialogInterface.OnClickLis
         alertDialog.setTitle("")
 
         val layout = activity?.layoutInflater?.inflate(R.layout.dialog_item_remove, null)
-        layout?.findViewById<TextView>(R.id.txtItemName)?.text = context?.getString(R.string.item_remove)?.replace("item_name", item.title)
+        val removeString = context?.getString(R.string.item_remove_replace)
+        layout?.findViewById<TextView>(R.id.txtItemName)?.text = Html.fromHtml(context?.getString(R.string.item_remove)?.replace(removeString!!, "<b>" + item.title + "</b>"))
         alertDialog.setView(layout)
 
         alertDialog.setPositiveButton(activity?.getString(R.string.yes), this)

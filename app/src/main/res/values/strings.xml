@@ -14,6 +14,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="item_remove">Are you sure you want to remove: [item_name] ?</string>
+    <string name="item_remove">Are you sure you want to remove:\n[item_name]?</string>
+    <string name="item_remove_replace">[item_name]</string>
     <string name="success_remove_item">Success!\nItem removed.</string>
+
+    <string name="lbl_item_edit">Edit</string>
+    <string name="lbl_item_edit_cancel">Cancel</string>
+
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Todo List</string>
+
+    <string name="lbl_title" translatable="false">Título</string>
+    <string name="lbl_category" translatable="false">Categoria</string>
+    <string name="lbl_description" translatable="false">Descrição</string>
+
+    <string name="btn_save" translatable="false">Salvar</string>
+
+    <string name="error_save_item">Erro!\nNão foi possível salvar o item. Por favor tente novamente.</string>
+    <string name="success_save_item">Sucesso!\nItem salvo!</string>
+
+    <string name="ok">OK</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+
+    <string name="item_remove">Você tem certeza que quer remover:\n[item_name]?</string>
+    <string name="item_remove_replace">[item_name]</string>
+    <string name="success_remove_item">Sucesso!\nItem removido.</string>
+
+    <string name="lbl_item_edit">Editar</string>
+    <string name="lbl_item_edit_cancel">Cancelar</string>
+</resources>

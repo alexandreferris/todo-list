@@ -19,86 +19,86 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/txtTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/lbl_title"
-                android:textColor="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/edtTitle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 android:inputType="text"
-                android:textSize="14sp"
+                android:hint="@string/lbl_title"
+                android:background="@null"
+                android:textColor="@color/gray_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
-
-            <TextView
-                android:id="@+id/txtCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:text="@string/lbl_category"
-                android:textColor="@android:color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtTitle" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:enabled="false"/>
 
             <EditText
                 android:id="@+id/edtCategory"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 android:inputType="text"
-                android:textColor="@android:color/black"
+                android:hint="@string/lbl_category"
+                android:background="@null"
+                android:textColor="@color/gray_dark"
                 android:textSize="14sp"
+                android:padding="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtCategory" />
+                app:layout_constraintTop_toBottomOf="@id/edtTitle"
+                android:enabled="false" />
 
             <TextView
-                android:id="@+id/txtDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:text="@string/lbl_description"
-                android:textColor="@android:color/black"
+                android:id="@+id/txtItemSpaceLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:background="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtCategory" />
+                app:layout_constraintTop_toBottomOf="@+id/edtCategory" />
 
             <EditText
                 android:id="@+id/edtDescription"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:minHeight="200dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:gravity="top|start"
+                android:background="@null"
                 android:ems="10"
+                android:enabled="false"
+                android:gravity="top|start"
+                android:hint="@string/lbl_description"
                 android:inputType="textMultiLine"
+                android:padding="6dp"
+                android:textColor="@color/gray_dark"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtDescription" />
+                app:layout_constraintTop_toBottomOf="@id/txtItemSpaceLine" />
 
             <Button
                 android:id="@+id/btnSave"
@@ -110,13 +110,15 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="32dp"
-                android:background="@color/colorAccent"
+                android:background="@drawable/border_full_green"
                 android:text="@string/btn_save"
-                android:textColor="@color/white"
+                android:textColor="@color/colorAccent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtDescription" />
+                app:layout_constraintTop_toBottomOf="@id/edtDescription"
+                android:enabled="false"
+                android:visibility="gone" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

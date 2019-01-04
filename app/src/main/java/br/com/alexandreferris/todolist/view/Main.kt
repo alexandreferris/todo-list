@@ -66,7 +66,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    private fun showAddNewItemScreen(itemID: Long?) {
+    private fun showAddNewItemScreen(itemID: Long) {
         val addNewItemScreen = Intent(this, EditItem::class.java)
         addNewItemScreen.putExtra("ITEM_ID", itemID)
 
@@ -104,7 +104,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view?.id) {
-            R.id.fabAddNewItem -> showAddNewItemScreen(null)
+            R.id.fabAddNewItem -> showAddNewItemScreen(0)
         }
     }
 }
