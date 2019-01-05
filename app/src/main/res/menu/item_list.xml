@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/ieCompleted"
+        android:title="@string/lbl_item_list_completed"
+        android:icon="@drawable/ic_list_completed_white"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/ieUncompleted"
+        android:title="@string/lbl_item_list_uncompleted"
+        android:icon="@drawable/ic_remove_white"
+        app:showAsAction="ifRoom" />
+
+</menu>

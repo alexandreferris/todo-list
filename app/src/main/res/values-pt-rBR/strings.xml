@@ -18,7 +18,19 @@
     <string name="item_remove">Você tem certeza que quer remover:\n[item_name]?</string>
     <string name="item_remove_replace">[item_name]</string>
     <string name="success_remove_item">Sucesso!\nItem removido.</string>
+    <string name="error_remove_item">Erro!\nNão foi possível remover o item. Por favor tente novamente.</string>
 
     <string name="lbl_item_edit">Editar</string>
     <string name="lbl_item_edit_cancel">Cancelar</string>
+
+    <string name="success_complete_item">Sucesso!\nItem concluído.</string>
+    <string name="error_complete_item">Erro!\nNão foi possível marcar o Item como concluído. Por favor tente novamente.</string>
+
+    <string name="lbl_item_list_completed">Concluídos</string>
+    <string name="lbl_item_list_uncompleted">Incompletos</string>
+
+    <string name="lbl_completed">Concluídos</string>
+
+    <string name="lbl_no_uncompleted_todos">Você não possui nenhuma tarefa\nAlgo novo para adicionar?</string>
+    <string name="lbl_no_completed_todos">Você não possui nenhuma tarefa concluída\nAdicione uma tarefa para começar.</string>
 </resources>

@@ -17,8 +17,20 @@
     <string name="item_remove">Are you sure you want to remove:\n[item_name]?</string>
     <string name="item_remove_replace">[item_name]</string>
     <string name="success_remove_item">Success!\nItem removed.</string>
+    <string name="error_remove_item">Error!\nCouldn\'t remove the item. Please try again.</string>
 
     <string name="lbl_item_edit">Edit</string>
     <string name="lbl_item_edit_cancel">Cancel</string>
+
+    <string name="success_complete_item">Success!\nItem marked as completed.</string>
+    <string name="error_complete_item">Error!\nCouldn\'t mark the item as completed. Please try again.</string>
+
+    <string name="lbl_item_list_completed">Completed</string>
+    <string name="lbl_item_list_uncompleted">Uncompleted</string>
+
+    <string name="lbl_completed">Completed</string>
+
+    <string name="lbl_no_uncompleted_todos">You don\'t have any TODOs\nAnything to add?</string>
+    <string name="lbl_no_completed_todos">You don\'t have any completed TODO\nAdd a new TODO to begin.</string>
 
 </resources>

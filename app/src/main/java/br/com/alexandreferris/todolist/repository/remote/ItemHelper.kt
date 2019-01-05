@@ -4,7 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
+import android.util.Log
 import br.com.alexandreferris.todolist.model.Item
+import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import org.apache.commons.lang3.math.NumberUtils
 
 
@@ -47,16 +49,34 @@ class ItemHelper(context: Context): DBHelper(context) {
      * @return Boolean
      */
     fun updateItem(item: Item): Boolean {
-        // New value for one column
+        // New values
         val values = ContentValues().apply {
             put(ItemColumns.COLUMN_TITLE, item.title)
             put(ItemColumns.COLUMN_DESCRIPTION, item.description)
             put(ItemColumns.COLUMN_CATEGORY, item.category)
         }
 
-        // Which row to update, based on the title
+        // Which row to update, based on the ID
         val selection = "${ItemColumns.COLUMN_ID} = ?"
         val selectionArgs = arrayOf(item.id.toString())
+        val count = this.writableDatabase.update(
+                ItemColumns.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs)
+
+        return (count > 0)
+    }
+
+    fun updateItemCompleted(itemId: Long, completed: String): Boolean {
+        // New values
+        val values = ContentValues().apply {
+            put(ItemColumns.COLUMN_COMPLETED, completed)
+        }
+
+        // Which row to update, based on the ID
+        val selection = "${ItemColumns.COLUMN_ID} = ?"
+        val selectionArgs = arrayOf(itemId.toString())
         val count = this.writableDatabase.update(
                 ItemColumns.TABLE_NAME,
                 values,
@@ -89,7 +109,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                     cursor.getLong(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_TITLE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)))
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)))
         }
         cursor.close()
 
@@ -119,14 +140,6 @@ class ItemHelper(context: Context): DBHelper(context) {
     fun getItems(): ArrayList<Item> {
         var items = ArrayList<Item>()
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        val projection = arrayOf(
-                ItemColumns.COLUMN_ID,
-                ItemColumns.COLUMN_TITLE,
-                ItemColumns.COLUMN_DESCRIPTION,
-                ItemColumns.COLUMN_CATEGORY)
-
         // Filter results with WHERE
         val selectionArgs = null
         val selection = null
@@ -136,7 +149,7 @@ class ItemHelper(context: Context): DBHelper(context) {
 
         val cursor = this.readableDatabase.query(
                 ItemColumns.TABLE_NAME,   // The table to query
-                projection,             // The array of columns to return (pass null to get all)
+                allColumnsProjection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
                 null,                   // don't group the rows
@@ -144,14 +157,14 @@ class ItemHelper(context: Context): DBHelper(context) {
                 sortOrder               // The sort order
         )
 
-        // val itemIds = mutableListOf<Long>()
         with(cursor) {
             while (moveToNext()) {
                 val item = Item(
                         getLong(getColumnIndexOrThrow(ItemColumns.COLUMN_ID)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_TITLE)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
-                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)))
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)))
                 items.add(item)
             }
         }
@@ -166,6 +179,7 @@ class ItemHelper(context: Context): DBHelper(context) {
         const val COLUMN_TITLE = "title"
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_CATEGORY = "category"
+        const val COLUMN_COMPLETED = "completed"
     }
 
     companion object {
@@ -173,7 +187,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                 "${ItemColumns.COLUMN_ID} INTEGER PRIMARY KEY," +
                 "${ItemColumns.COLUMN_TITLE} TEXT," +
                 "${ItemColumns.COLUMN_DESCRIPTION} TEXT," +
-                "${ItemColumns.COLUMN_CATEGORY} TEXT)"
+                "${ItemColumns.COLUMN_CATEGORY} TEXT," +
+                "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstans.COMPLETED_YES}','${ItemConstans.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstans.COMPLETED_NO}')"
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"
 
@@ -182,6 +197,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 ItemColumns.COLUMN_ID,
                 ItemColumns.COLUMN_TITLE,
                 ItemColumns.COLUMN_DESCRIPTION,
-                ItemColumns.COLUMN_CATEGORY)
+                ItemColumns.COLUMN_CATEGORY,
+                ItemColumns.COLUMN_COMPLETED)
     }
 }

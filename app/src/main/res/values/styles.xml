@@ -12,4 +12,10 @@
         <item name="android:fontFamily">@font/carme</item>
     </style>
 
+    <!-- Checkbox White -->
+    <style name="checkboxWhite" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+
 </resources>

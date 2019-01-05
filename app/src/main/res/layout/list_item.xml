@@ -14,15 +14,25 @@
 
         <TextView
             android:id="@+id/txtItemStatusBG"
-            android:layout_width="8dp"
-            android:layout_height="match_parent"/>
+            android:layout_width="28dp"
+            android:layout_height="match_parent" />
+
+        <CheckBox
+            android:id="@+id/chkCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/txtItemStatusBG"
+            app:layout_constraintEnd_toEndOf="@+id/txtItemStatusBG"
+            app:layout_constraintStart_toStartOf="@+id/txtItemStatusBG"
+            app:layout_constraintTop_toTopOf="@+id/txtItemStatusBG"
+            android:theme="@style/checkboxWhite" />
 
         <TextView
             android:id="@+id/txtItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginLeft="14dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
             android:layout_marginTop="8dp"
             android:text="item_name"
             app:layout_constraintStart_toStartOf="@id/txtItemStatusBG"

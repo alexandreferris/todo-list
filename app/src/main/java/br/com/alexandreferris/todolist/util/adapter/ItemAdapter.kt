@@ -1,16 +1,21 @@
 package br.com.alexandreferris.todolist.util.adapter
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.model.Item
+import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import kotlinx.android.synthetic.main.list_item.view.*
+import org.apache.commons.lang3.math.NumberUtils
 
-class ItemAdapter(val listener: (Long, Boolean) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
+class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCompletedListener: (Long, Boolean) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
+
     private var itemList: ArrayList<Item> = ArrayList<Item>()
+    var itemListCompleted: String = ItemConstans.COMPLETED_NO
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -37,7 +42,7 @@ class ItemAdapter(val listener: (Long, Boolean) -> Unit): RecyclerView.Adapter<I
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false) as View
 
         return MyViewHolder(view).listen { pos, delete ->
-            listener.invoke(itemList[pos].id, delete)
+            itemClickListener.invoke(itemList[pos].id, delete)
         }
     }
 
@@ -49,6 +54,14 @@ class ItemAdapter(val listener: (Long, Boolean) -> Unit): RecyclerView.Adapter<I
 
         holder.view.txtItemName.text = itemList[position].title
         holder.view.txtItemCategory.text = itemList[position].category
+
+        holder.view.chkCompleted.isChecked = (itemList[position].completed.compareTo(ItemConstans.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
+        holder.view.chkCompleted.setOnCheckedChangeListener { _, checked ->
+            checkboxCompletedListener.invoke(itemList[position].id, checked)
+            if ((itemListCompleted.compareTo(ItemConstans.COMPLETED_YES) == NumberUtils.INTEGER_ZERO && !checked)
+                    ||(itemListCompleted.compareTo(ItemConstans.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked) )
+                    notifyDataSetChanged()
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -59,6 +72,7 @@ class ItemAdapter(val listener: (Long, Boolean) -> Unit): RecyclerView.Adapter<I
     }
 
     fun setItemList(itemList: ArrayList<Item>) {
-        this.itemList = itemList
+        this.itemList = ArrayList(itemList.filter { item -> item.completed == this.itemListCompleted })
     }
+
 }

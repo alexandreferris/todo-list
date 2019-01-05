@@ -24,8 +24,12 @@ open class EditItemVM(val context: Context): BaseVM() {
         return itemHelper.updateItem(item)
     }
 
-    fun getItem(itemID: Long): LiveData<Item> {
-        this.item.value = itemHelper.getItem(itemID)
+    fun loadItem(itemId: Long) {
+        this.item.value = itemHelper.getItem(itemId)
+    }
+
+    fun getItem(itemId: Long): LiveData<Item> {
+        loadItem(itemId)
         return this.item
     }
 

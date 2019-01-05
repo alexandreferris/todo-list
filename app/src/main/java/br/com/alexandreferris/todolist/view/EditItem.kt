@@ -21,7 +21,7 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var editItemVM: EditItemVM
     private var itemCreatedOrEdited: Boolean = false
-    private var itemID: Long = 0
+    private var itemId: Long = 0
     private var item: Item = Item()
 
     // Toolbar MenuItem
@@ -43,22 +43,19 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         btnSave.setOnClickListener(this)
 
         // Retrieving Extras (if having any)
-        if (intent.hasExtra("ITEM_ID")) {
-            itemID = intent.getLongExtra("ITEM_ID", 0)
+        if (intent.hasExtra(ActivityForResultEnum.ITEM_ID)) {
+            itemId = intent.getLongExtra(ActivityForResultEnum.ITEM_ID, 0)
 
-            if (itemID > NumberUtils.LONG_ZERO) {
+            if (itemId > NumberUtils.LONG_ZERO) {
                 // Get Item with Observer
-                editItemVM.getItem(itemID).observe(this, Observer { item ->
+                editItemVM.getItem(itemId).observe(this, Observer { item ->
                     this.item = item!!
                     updateItemInformations()
                 })
-
-                // Load editing toolbar
-                // this.startActionMode(mActionModeCallback)
             }
         }
 
-        if (itemID == NumberUtils.LONG_ZERO)
+        if (itemId == NumberUtils.LONG_ZERO)
             enableFieldsForEditing()
     }
 
@@ -175,19 +172,30 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveItem() {
+        // Creates the Item to be saved
         val item = Item(
-                itemID,
+                itemId,
                 edtTitle.text.toString(),
                 edtDescription.text.toString(),
-                edtCategory.text.toString()
+                edtCategory.text.toString(),
+                item.completed
         )
 
-        if (itemID == NumberUtils.LONG_ZERO)
+        // Verify whether the Item needs to be created or updated
+        if (itemId == NumberUtils.LONG_ZERO)
             itemCreatedOrEdited = editItemVM.saveItem(item)
         else
             itemCreatedOrEdited = editItemVM.updateItem(item)
 
+        // Check if the Item has been saved successfully
         if (itemCreatedOrEdited) {
+            // Check if the Item was updated, then make changes in the UI
+            if (itemId > NumberUtils.LONG_ZERO) {
+                editItemVM.loadItem(itemId)
+                disableFieldsForEditing()
+                mIeEdit.isVisible = true
+                mIeCancel.isVisible = false
+            }
             Snackbar.make(findViewById(R.id.rlEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
         } else
             Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
@@ -201,7 +209,7 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         val parentScreen = Intent()
-        parentScreen.putExtra("ITEM_CREATED_OR_EDITED", itemCreatedOrEdited)
+        parentScreen.putExtra(ActivityForResultEnum.ITEM_CREATED_OR_EDITED, itemCreatedOrEdited)
         setResult(ActivityForResultEnum.ADD_OR_EDIT_ITEM, parentScreen)
 
         super.onBackPressed()
