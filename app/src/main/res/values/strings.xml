@@ -33,4 +33,10 @@
     <string name="lbl_no_uncompleted_todos">You don\'t have any TODOs\nAnything to add?</string>
     <string name="lbl_no_completed_todos">You don\'t have any completed TODO\nAdd a new TODO to begin.</string>
 
+    <string name="lbl_priority">Priority</string>
+    <string name="lbl_priority_low">Low</string>
+    <string name="lbl_priority_normal">Normal</string>
+    <string name="lbl_priority_important">Important</string>
+    <string name="lbl_priority_critical">Critical</string>
+
 </resources>

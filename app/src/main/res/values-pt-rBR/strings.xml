@@ -33,4 +33,10 @@
 
     <string name="lbl_no_uncompleted_todos">Você não possui nenhuma tarefa\nAlgo novo para adicionar?</string>
     <string name="lbl_no_completed_todos">Você não possui nenhuma tarefa concluída\nAdicione uma tarefa para começar.</string>
+
+    <string name="lbl_priority">Prioridade</string>
+    <string name="lbl_priority_low">Baixa</string>
+    <string name="lbl_priority_normal">Normal</string>
+    <string name="lbl_priority_important">Importante</string>
+    <string name="lbl_priority_critical">Crítico</string>
 </resources>

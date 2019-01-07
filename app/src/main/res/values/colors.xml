@@ -4,6 +4,13 @@
     <color name="colorPrimaryDark">#02D69F</color>
     <color name="colorAccent">#02D69F</color>
 
+    <!-- Priority -->
+    <color name="priority_low">#02D69F</color>
+    <color name="priority_normal">#197DAD</color>
+    <color name="priority_important">#FDCC5C</color>
+    <color name="priority_critical">#EF3A66</color>
+
+    <!-- Util -->
     <color name="white">#FFFFFF</color>
 
     <color name="gray">#CCCCCC</color>

@@ -18,4 +18,8 @@
         <item name="colorControlActivated">@color/white</item>
     </style>
 
+    <style name="RadioButtonPriority" parent="RadioButton">
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
 </resources>

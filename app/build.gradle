@@ -44,6 +44,10 @@ dependencies {
     // Magic Numbers
     implementation 'org.apache.commons:commons-lang3:3.8.1'
 
+    // Segmented Group Button
+    implementation 'info.hoang8f:android-segmented:1.0.6'
+
+
     // Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

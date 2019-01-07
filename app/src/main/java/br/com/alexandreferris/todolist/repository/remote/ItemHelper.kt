@@ -35,6 +35,7 @@ class ItemHelper(context: Context): DBHelper(context) {
             put(ItemColumns.COLUMN_TITLE, item.title)
             put(ItemColumns.COLUMN_DESCRIPTION, item.description)
             put(ItemColumns.COLUMN_CATEGORY, item.category)
+            put(ItemColumns.COLUMN_PRIORITY, item.priority)
         }
 
         // Insert the new row, returning the primary key value of the new row
@@ -54,6 +55,7 @@ class ItemHelper(context: Context): DBHelper(context) {
             put(ItemColumns.COLUMN_TITLE, item.title)
             put(ItemColumns.COLUMN_DESCRIPTION, item.description)
             put(ItemColumns.COLUMN_CATEGORY, item.category)
+            put(ItemColumns.COLUMN_PRIORITY, item.priority)
         }
 
         // Which row to update, based on the ID
@@ -103,14 +105,15 @@ class ItemHelper(context: Context): DBHelper(context) {
         )
 
 
-        var item: Item = Item()
+        var item = Item()
         while (cursor.moveToNext()) {
             item = Item(
                     cursor.getLong(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_TITLE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)))
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)))
         }
         cursor.close()
 
@@ -164,7 +167,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_TITLE)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
-                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)))
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)),
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)))
                 items.add(item)
             }
         }
@@ -180,6 +184,7 @@ class ItemHelper(context: Context): DBHelper(context) {
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_CATEGORY = "category"
         const val COLUMN_COMPLETED = "completed"
+        const val COLUMN_PRIORITY = "priority"
     }
 
     companion object {
@@ -188,7 +193,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                 "${ItemColumns.COLUMN_TITLE} TEXT," +
                 "${ItemColumns.COLUMN_DESCRIPTION} TEXT," +
                 "${ItemColumns.COLUMN_CATEGORY} TEXT," +
-                "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstans.COMPLETED_YES}','${ItemConstans.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstans.COMPLETED_NO}')"
+                "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstans.COMPLETED_YES}','${ItemConstans.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstans.COMPLETED_NO}'," +
+                "${ItemColumns.COLUMN_PRIORITY} TEXT CHECK( ${ItemColumns.COLUMN_PRIORITY } IN ('${ItemConstans.PRIORITY_LOW}','${ItemConstans.PRIORITY_NORMAL}','${ItemConstans.PRIORITY_IMPORTANT}','${ItemConstans.PRIORITY_CRITICAL}') ) NOT NULL DEFAULT '${ItemConstans.PRIORITY_LOW}')"
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"
 
@@ -198,6 +204,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 ItemColumns.COLUMN_TITLE,
                 ItemColumns.COLUMN_DESCRIPTION,
                 ItemColumns.COLUMN_CATEGORY,
-                ItemColumns.COLUMN_COMPLETED)
+                ItemColumns.COLUMN_COMPLETED,
+                ItemColumns.COLUMN_PRIORITY)
     }
 }

@@ -13,6 +13,7 @@ import android.widget.EditText
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
 import br.com.alexandreferris.todolist.model.Item
+import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import br.com.alexandreferris.todolist.viewmodel.EditItemVM
 import kotlinx.android.synthetic.main.activity_edit_item.*
 import org.apache.commons.lang3.math.NumberUtils
@@ -95,6 +96,14 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         edtTitle.setText(item.title)
         edtDescription.setText(item.description)
         edtCategory.setText(item.category)
+
+        // Priority Buttons
+        when (item.priority) {
+            ItemConstans.PRIORITY_NORMAL -> rbPriorityNormal.isChecked = true
+            ItemConstans.PRIORITY_IMPORTANT -> rbPriorityImportant.isChecked = true
+            ItemConstans.PRIORITY_CRITICAL -> rbPriorityCritical.isChecked = true
+            else -> rbPriorityLow.isChecked = true
+        }
     }
 
     private fun updateEditTextBackground(editText: EditText, view: View, focused: Boolean) {
@@ -135,6 +144,11 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             updateEditTextBackground(edtDescription, view, focused)
         }
 
+        // Enabling Priority Buttons
+        rbPriorityLow.isEnabled = true
+        rbPriorityNormal.isEnabled = true
+        rbPriorityImportant.isEnabled = true
+        rbPriorityCritical.isEnabled = true
 
         // Enabling Save Button
         btnSave.visibility = View.VISIBLE
@@ -163,6 +177,12 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         edtCategory.onFocusChangeListener = null
         edtDescription.onFocusChangeListener = null
 
+        // Disabling Priority Buttons
+        rbPriorityLow.isEnabled = false
+        rbPriorityNormal.isEnabled = false
+        rbPriorityImportant.isEnabled = false
+        rbPriorityCritical.isEnabled = false
+
         // Disabling Save Button
         btnSave.visibility = View.GONE
         btnSave.isEnabled = false
@@ -172,13 +192,20 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveItem() {
+
         // Creates the Item to be saved
         val item = Item(
                 itemId,
                 edtTitle.text.toString(),
                 edtDescription.text.toString(),
                 edtCategory.text.toString(),
-                item.completed
+                item.completed,
+                when (sgPriorityButton.checkedRadioButtonId) {
+                    R.id.rbPriorityNormal -> ItemConstans.PRIORITY_NORMAL
+                    R.id.rbPriorityImportant -> ItemConstans.PRIORITY_IMPORTANT
+                    R.id.rbPriorityCritical -> ItemConstans.PRIORITY_CRITICAL
+                    else -> ItemConstans.PRIORITY_LOW
+                }
         )
 
         // Verify whether the Item needs to be created or updated

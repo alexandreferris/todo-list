@@ -100,6 +100,78 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtItemSpaceLine" />
 
+            <TextView
+                android:id="@+id/txtPriority"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/lbl_priority"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtDescription" />
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sgPriorityButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="horizontal"
+                segmentedgroup:layout_constraintEnd_toEndOf="parent"
+                segmentedgroup:layout_constraintStart_toStartOf="@+id/txtPriority"
+                segmentedgroup:layout_constraintTop_toBottomOf="@+id/txtPriority"
+                segmentedgroup:sc_border_width="2dp"
+                segmentedgroup:sc_checked_text_color="@color/white"
+                segmentedgroup:sc_tint_color="@color/colorAccent"
+                segmentedgroup:sc_corner_radius="6dp">
+
+                <RadioButton
+                    android:id="@+id/rbPriorityLow"
+                    style="@style/RadioButton"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:checked="true"
+                    android:text="@string/lbl_priority_low"
+                    android:backgroundTint="@color/priority_low"/>
+
+                <RadioButton
+                    android:id="@+id/rbPriorityNormal"
+                    style="@style/RadioButton"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/lbl_priority_normal"
+                    android:backgroundTint="@color/priority_normal" />
+
+                <RadioButton
+                    android:id="@+id/rbPriorityImportant"
+                    style="@style/RadioButton"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/lbl_priority_important"
+                    android:backgroundTint="@color/priority_important" />
+
+                <RadioButton
+                    android:id="@+id/rbPriorityCritical"
+                    style="@style/RadioButton"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/lbl_priority_critical"
+                    android:backgroundTint="@color/priority_critical" />
+
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="140dp"
@@ -116,7 +188,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edtDescription"
+                app:layout_constraintTop_toBottomOf="@id/sgPriorityButton"
                 android:enabled="false"
                 android:visibility="gone" />
 

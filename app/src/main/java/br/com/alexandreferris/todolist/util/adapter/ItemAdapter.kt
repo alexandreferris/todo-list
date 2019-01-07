@@ -48,13 +48,36 @@ class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCo
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        // Later get Status and apply the backgrounds
-        holder.view.clItemCard.background = holder.view.resources.getDrawable(R.drawable.border_full_green)
-        holder.view.txtItemStatusBG.background = holder.view.resources.getDrawable(R.drawable.border_left_green)
+        // Item background based on Priority Level
+        var cardBackgroundColor: Int
+        var cardStatusBackgroundColor: Int
+        when (itemList[position].priority) {
+            ItemConstans.PRIORITY_NORMAL -> {
+                cardBackgroundColor = R.drawable.border_full_priority_normal
+                cardStatusBackgroundColor = R.drawable.border_left_priority_normal
+            }
+            ItemConstans.PRIORITY_IMPORTANT -> {
+                cardBackgroundColor = R.drawable.border_full_priority_important
+                cardStatusBackgroundColor = R.drawable.border_left_priority_important
+            }
+            ItemConstans.PRIORITY_CRITICAL -> {
+                cardBackgroundColor = R.drawable.border_full_priority_critical
+                cardStatusBackgroundColor = R.drawable.border_left_priority_critical
+            }
+            else -> {
+                cardBackgroundColor = R.drawable.border_full_priority_low
+                cardStatusBackgroundColor = R.drawable.border_left_priority_low
+            }
+        }
 
+        holder.view.clItemCard.background = holder.view.resources.getDrawable(cardBackgroundColor)
+        holder.view.txtItemStatusBG.background = holder.view.resources.getDrawable(cardStatusBackgroundColor)
+
+        // Name and Category
         holder.view.txtItemName.text = itemList[position].title
         holder.view.txtItemCategory.text = itemList[position].category
 
+        // Completed Status
         holder.view.chkCompleted.isChecked = (itemList[position].completed.compareTo(ItemConstans.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
         holder.view.chkCompleted.setOnCheckedChangeListener { _, checked ->
             checkboxCompletedListener.invoke(itemList[position].id, checked)
