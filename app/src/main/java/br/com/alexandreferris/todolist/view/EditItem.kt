@@ -152,11 +152,10 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         if (item.alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
             swAlarmNotification.isChecked = true
 
-            val calendarDateTime = Calendar.getInstance()
-            calendarDateTime.timeInMillis = item.alarmDateTime.toLong()
+            calendarAlarmDateTime.timeInMillis = item.alarmDateTime.toLong()
 
-            txtAlarmDate.text = DateTimeUtil.correctDayAndMonth(calendarDateTime.get(Calendar.DAY_OF_MONTH), calendarDateTime.get(Calendar.MONTH), calendarDateTime.get(Calendar.YEAR))
-            txtAlarmTime.text = DateTimeUtil.addLeadingZeroToTime(calendarDateTime.get(Calendar.HOUR_OF_DAY), calendarDateTime.get(Calendar.MINUTE))
+            txtAlarmDate.text = DateTimeUtil.correctDayAndMonth(calendarAlarmDateTime.get(Calendar.DAY_OF_MONTH), calendarAlarmDateTime.get(Calendar.MONTH), calendarAlarmDateTime.get(Calendar.YEAR))
+            txtAlarmTime.text = DateTimeUtil.addLeadingZeroToTime(calendarAlarmDateTime.get(Calendar.HOUR_OF_DAY), calendarAlarmDateTime.get(Calendar.MINUTE))
         }
     }
 
