@@ -100,6 +100,92 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtItemSpaceLine" />
 
+            <Switch
+                android:id="@+id/swAlarmNotification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:checked="false"
+                android:fontFamily="@font/carme"
+                android:switchPadding="8dp"
+                android:text="@string/lbl_alarm_notification"
+                android:textColor="@color/gray_text"
+                android:textSize="14sp"
+                android:trackTint="@color/gray_dark"
+                android:enabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtDescription" />
+
+            <android.support.constraint.ConstraintLayout
+                android:visibility="gone"
+                android:id="@+id/clAlarmDateTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/swAlarmNotification">
+
+                <ImageView
+                    android:id="@+id/ivAlarmDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/content_description_alarm_date"
+                    android:enabled="false"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_date_calendar_gray_dark" />
+
+                <TextView
+                    android:id="@+id/txtAlarmDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/lbl_item_alarm_date"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivAlarmDate"
+                    app:layout_constraintStart_toEndOf="@+id/ivAlarmDate"
+                    app:layout_constraintTop_toTopOf="@+id/ivAlarmDate" />
+
+                <ImageView
+                    android:id="@+id/ivAlarmTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:contentDescription="@string/content_description_alarm_time"
+                    android:enabled="false"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivAlarmDate"
+                    app:layout_constraintStart_toEndOf="@+id/txtAlarmDate"
+                    app:layout_constraintTop_toTopOf="@+id/ivAlarmDate"
+                    app:srcCompat="@drawable/ic_clock_gray_dark" />
+
+                <TextView
+                    android:id="@+id/txtAlarmTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/lbl_item_alarm_time"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivAlarmDate"
+                    app:layout_constraintStart_toEndOf="@+id/ivAlarmTime"
+                    app:layout_constraintTop_toTopOf="@+id/ivAlarmDate" />
+            </android.support.constraint.ConstraintLayout>
+
             <TextView
                 android:id="@+id/txtPriority"
                 android:layout_width="0dp"
@@ -111,10 +197,12 @@
                 android:layout_marginRight="16dp"
                 android:text="@string/lbl_priority"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/clAlarmDateTime" />
 
-            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            <info.hoang8f.android.segmented.SegmentedGroup
+                xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/sgPriorityButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -135,7 +223,7 @@
                 <RadioButton
                     android:id="@+id/rbPriorityLow"
                     style="@style/RadioButton"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:checked="true"
@@ -145,7 +233,7 @@
                 <RadioButton
                     android:id="@+id/rbPriorityNormal"
                     style="@style/RadioButton"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="@string/lbl_priority_normal"
@@ -154,7 +242,7 @@
                 <RadioButton
                     android:id="@+id/rbPriorityImportant"
                     style="@style/RadioButton"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="@string/lbl_priority_important"
@@ -163,7 +251,7 @@
                 <RadioButton
                     android:id="@+id/rbPriorityCritical"
                     style="@style/RadioButton"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="@string/lbl_priority_critical"

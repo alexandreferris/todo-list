@@ -11,12 +11,15 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.Main">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.EditItem"></activity>
+        <activity android:name=".view.EditItem" />
+
+        <receiver android:name=".util.notification.NotificationReceiver" />
     </application>
 
 </manifest>

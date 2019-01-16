@@ -3,11 +3,9 @@ package br.com.alexandreferris.todolist.view
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.transition.Visibility
 import android.view.*
 import android.widget.EditText
 import br.com.alexandreferris.todolist.R
@@ -17,6 +15,11 @@ import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import br.com.alexandreferris.todolist.viewmodel.EditItemVM
 import kotlinx.android.synthetic.main.activity_edit_item.*
 import org.apache.commons.lang3.math.NumberUtils
+import java.util.*
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.DialogInterface
+import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
 
 class EditItem : AppCompatActivity(), View.OnClickListener {
 
@@ -28,6 +31,12 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     // Toolbar MenuItem
     private lateinit var mIeEdit: MenuItem
     private lateinit var mIeCancel: MenuItem
+
+    // Alarm
+    private val calendarAlarmDateTime = Calendar.getInstance()
+
+    private lateinit var listenerDatePicker: DatePickerDialog.OnDateSetListener
+    private lateinit var listenerTimePicker: TimePickerDialog.OnTimeSetListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +52,32 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         // Button Click Listener
         btnSave.setOnClickListener(this)
 
+        // Hide and Show alarm fields
+        swAlarmNotification.setOnCheckedChangeListener { compoundButton, checked ->
+            clAlarmDateTime.visibility = if (checked) View.VISIBLE else View.GONE
+        }
+
+        // Set current date and time to alarm inputs
+        calendarAlarmDateTime.add(Calendar.HOUR_OF_DAY, NumberUtils.INTEGER_ONE)
+        updateAlarmDateTime()
+
+        // Listeners for Alarm date and time picker
+        listenerDatePicker = DatePickerDialog.OnDateSetListener { datePicker, year, month, dayOfMonth ->
+            calendarAlarmDateTime.set(Calendar.YEAR, year)
+            calendarAlarmDateTime.set(Calendar.MONTH, month)
+            calendarAlarmDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateAlarmDateTime()
+        }
+
+        listenerTimePicker = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+            calendarAlarmDateTime.set(Calendar.HOUR_OF_DAY, hour)
+            calendarAlarmDateTime.set(Calendar.MINUTE, minute)
+            updateAlarmDateTime()
+        }
+
+        ivAlarmDate.setOnClickListener(this)
+        ivAlarmTime.setOnClickListener(this)
+
         // Retrieving Extras (if having any)
         if (intent.hasExtra(ActivityForResultEnum.ITEM_ID)) {
             itemId = intent.getLongExtra(ActivityForResultEnum.ITEM_ID, 0)
@@ -56,8 +91,16 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        if (itemId == NumberUtils.LONG_ZERO)
+        // Enable all fields if Item has no itemId
+        if (itemId > NumberUtils.LONG_ZERO)
+            disableFieldsForEditing()
+        else
             enableFieldsForEditing()
+    }
+
+    private fun updateAlarmDateTime() {
+        txtAlarmDate.text = DateTimeUtil.correctDayAndMonth(calendarAlarmDateTime.get(Calendar.DAY_OF_MONTH), calendarAlarmDateTime.get(Calendar.MONTH), calendarAlarmDateTime.get(Calendar.YEAR))
+        txtAlarmTime.text = DateTimeUtil.addLeadingZeroToTime(calendarAlarmDateTime.get(Calendar.HOUR_OF_DAY), calendarAlarmDateTime.get(Calendar.MINUTE))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -103,6 +146,17 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             ItemConstans.PRIORITY_IMPORTANT -> rbPriorityImportant.isChecked = true
             ItemConstans.PRIORITY_CRITICAL -> rbPriorityCritical.isChecked = true
             else -> rbPriorityLow.isChecked = true
+        }
+
+        // Date and Time Alarm
+        if (item.alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
+            swAlarmNotification.isChecked = true
+
+            val calendarDateTime = Calendar.getInstance()
+            calendarDateTime.timeInMillis = item.alarmDateTime.toLong()
+
+            txtAlarmDate.text = DateTimeUtil.correctDayAndMonth(calendarDateTime.get(Calendar.DAY_OF_MONTH), calendarDateTime.get(Calendar.MONTH), calendarDateTime.get(Calendar.YEAR))
+            txtAlarmTime.text = DateTimeUtil.addLeadingZeroToTime(calendarDateTime.get(Calendar.HOUR_OF_DAY), calendarDateTime.get(Calendar.MINUTE))
         }
     }
 
@@ -153,6 +207,11 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         // Enabling Save Button
         btnSave.visibility = View.VISIBLE
         btnSave.isEnabled = true
+
+        // Enabling Date and Time
+        swAlarmNotification.isEnabled = true
+        ivAlarmDate.isEnabled = true
+        ivAlarmTime.isEnabled = true
     }
 
     private fun disableFieldsForEditing() {
@@ -187,12 +246,16 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         btnSave.visibility = View.GONE
         btnSave.isEnabled = false
 
+        // Disabling Date and Time
+        swAlarmNotification.isEnabled = false
+        ivAlarmDate.isEnabled = false
+        ivAlarmTime.isEnabled = false
+
         // Remove any changes made
         updateItemInformations()
     }
 
     private fun saveItem() {
-
         // Creates the Item to be saved
         val item = Item(
                 itemId,
@@ -205,7 +268,8 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
                     R.id.rbPriorityImportant -> ItemConstans.PRIORITY_IMPORTANT
                     R.id.rbPriorityCritical -> ItemConstans.PRIORITY_CRITICAL
                     else -> ItemConstans.PRIORITY_LOW
-                }
+                },
+                if (swAlarmNotification.isChecked) calendarAlarmDateTime.timeInMillis.toString() else NumberUtils.INTEGER_ZERO.toString()
         )
 
         // Verify whether the Item needs to be created or updated
@@ -228,9 +292,43 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun showDatePicker() {
+        val datePicker = DatePickerDialog(
+                this,
+                R.style.pickerDialogTheme,
+                listenerDatePicker,
+                calendarAlarmDateTime.get(Calendar.YEAR),
+                calendarAlarmDateTime.get(Calendar.MONTH),
+                calendarAlarmDateTime.get(Calendar.DAY_OF_MONTH))
+
+        val listenerDatePickerConfirm = DialogInterface.OnClickListener { dialogInterface, which ->
+            val finalDatePicker = datePicker.datePicker
+            listenerDatePicker.onDateSet(finalDatePicker, finalDatePicker.year, finalDatePicker.month, finalDatePicker.dayOfMonth)
+        }
+
+        datePicker.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.confirm), listenerDatePickerConfirm)
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePicker.show()
+    }
+
+    private fun showTimePicker() {
+        val timePicker = TimePickerDialog(
+                this,
+                R.style.pickerDialogTheme,
+                listenerTimePicker,
+                calendarAlarmDateTime.get(Calendar.HOUR_OF_DAY),
+                calendarAlarmDateTime.get(Calendar.MINUTE),
+                false)
+
+        timePicker.setTitle(getString(R.string.title_select_time))
+        timePicker.show()
+    }
+
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btnSave -> saveItem()
+            R.id.ivAlarmDate -> showDatePicker()
+            R.id.ivAlarmTime -> showTimePicker()
         }
     }
 

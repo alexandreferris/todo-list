@@ -20,6 +20,7 @@
     <string name="error_remove_item">Error!\nCouldn\'t remove the item. Please try again.</string>
 
     <string name="lbl_item_edit">Edit</string>
+    <string name="confirm">Confirm</string>
     <string name="lbl_item_edit_cancel">Cancel</string>
 
     <string name="success_complete_item">Success!\nItem marked as completed.</string>
@@ -38,5 +39,17 @@
     <string name="lbl_priority_normal">Normal</string>
     <string name="lbl_priority_important">Important</string>
     <string name="lbl_priority_critical">Critical</string>
+
+    <string name="content_description_alarm_date">Icon for Date Alarm</string>
+    <string name="content_description_alarm_time">Icon for Time Alarm</string>
+
+    <string name="lbl_item_name" translatable="false">item_name</string>
+    <string name="lbl_item_category" translatable="false">item_category</string>
+    <string name="lbl_item_alarm_date" translatable="false">alarm_date</string>
+    <string name="lbl_item_alarm_time" translatable="false">alarm_time</string>
+
+    <string name="lbl_alarm_notification">Alarm Notification</string>
+
+    <string name="title_select_time">Select Time:</string>
 
 </resources>

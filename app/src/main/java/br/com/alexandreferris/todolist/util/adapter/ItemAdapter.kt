@@ -1,7 +1,6 @@
 package br.com.alexandreferris.todolist.util.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,10 @@ import android.view.ViewGroup
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
 import kotlinx.android.synthetic.main.list_item.view.*
 import org.apache.commons.lang3.math.NumberUtils
+import java.util.*
 
 class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCompletedListener: (Long, Boolean) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
 
@@ -85,6 +86,18 @@ class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCo
                     ||(itemListCompleted.compareTo(ItemConstans.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked) )
                     notifyDataSetChanged()
         }
+
+        // Date and Time
+        hideShowDateTimeFields(holder, false)
+        if (itemList[position].alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
+            hideShowDateTimeFields(holder, true)
+
+            val calendarDateTime = Calendar.getInstance()
+            calendarDateTime.timeInMillis = itemList[position].alarmDateTime.toLong()
+
+            holder.view.txtDate.text = DateTimeUtil.correctDayAndMonth(calendarDateTime.get(Calendar.DAY_OF_MONTH), calendarDateTime.get(Calendar.MONTH), calendarDateTime.get(Calendar.YEAR))
+            holder.view.txtTime.text = DateTimeUtil.addLeadingZeroToTime(calendarDateTime.get(Calendar.HOUR_OF_DAY), calendarDateTime.get(Calendar.MINUTE))
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -96,6 +109,13 @@ class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCo
 
     fun setItemList(itemList: ArrayList<Item>) {
         this.itemList = ArrayList(itemList.filter { item -> item.completed == this.itemListCompleted })
+    }
+
+    private fun hideShowDateTimeFields(holder: MyViewHolder, show: Boolean) {
+        holder.view.ivDate.visibility = if (show) View.VISIBLE else View.GONE
+        holder.view.ivTime.visibility = if (show) View.VISIBLE else View.GONE
+        holder.view.txtDate.visibility = if (show) View.VISIBLE else View.GONE
+        holder.view.txtTime.visibility = if (show) View.VISIBLE else View.GONE
     }
 
 }

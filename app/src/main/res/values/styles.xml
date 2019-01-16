@@ -22,4 +22,9 @@
         <item name="android:background">@color/colorAccent</item>
     </style>
 
+    <!-- Date/Time Picker Dialog-->
+    <style name="pickerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>

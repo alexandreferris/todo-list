@@ -13,6 +13,7 @@
     <!-- Util -->
     <color name="white">#FFFFFF</color>
 
+    <color name="gray_text">#797979</color>
     <color name="gray">#CCCCCC</color>
     <color name="gray_slight_dark">#AAAAAA</color>
     <color name="gray_dark">#333333</color>

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import android.util.Log
 import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import org.apache.commons.lang3.math.NumberUtils
@@ -30,18 +29,19 @@ class ItemHelper(context: Context): DBHelper(context) {
      * @param Item
      * @returns Boolean
      */
-    fun saveItem(item: Item): Boolean {
+    fun saveItem(item: Item): Long {
         val values = ContentValues().apply {
             put(ItemColumns.COLUMN_TITLE, item.title)
             put(ItemColumns.COLUMN_DESCRIPTION, item.description)
             put(ItemColumns.COLUMN_CATEGORY, item.category)
             put(ItemColumns.COLUMN_PRIORITY, item.priority)
+            put(ItemColumns.COLUMN_ALARM_DATE_TIME, item.alarmDateTime)
         }
 
         // Insert the new row, returning the primary key value of the new row
         val newRowId = this.writableDatabase.insert(ItemColumns.TABLE_NAME, null, values)
 
-        return (newRowId > 0)
+        return newRowId
     }
 
     /**
@@ -56,6 +56,7 @@ class ItemHelper(context: Context): DBHelper(context) {
             put(ItemColumns.COLUMN_DESCRIPTION, item.description)
             put(ItemColumns.COLUMN_CATEGORY, item.category)
             put(ItemColumns.COLUMN_PRIORITY, item.priority)
+            put(ItemColumns.COLUMN_ALARM_DATE_TIME, item.alarmDateTime)
         }
 
         // Which row to update, based on the ID
@@ -67,7 +68,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 selection,
                 selectionArgs)
 
-        return (count > 0)
+        return (count > NumberUtils.INTEGER_ZERO)
     }
 
     fun updateItemCompleted(itemId: Long, completed: String): Boolean {
@@ -85,7 +86,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 selection,
                 selectionArgs)
 
-        return (count > 0)
+        return (count > NumberUtils.INTEGER_ZERO)
     }
 
     fun getItem(itemId: Long): Item {
@@ -113,7 +114,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
                     cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)))
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(ItemColumns.COLUMN_ALARM_DATE_TIME)))
         }
         cursor.close()
 
@@ -133,7 +135,7 @@ class ItemHelper(context: Context): DBHelper(context) {
         // Issue SQL statement.
         val deletedRows = this.writableDatabase.delete(ItemColumns.TABLE_NAME, selection, selectionArgs)
 
-        return (deletedRows > 0)
+        return (deletedRows > NumberUtils.INTEGER_ZERO)
     }
 
     /**
@@ -168,7 +170,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_DESCRIPTION)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_CATEGORY)),
                         getString(getColumnIndexOrThrow(ItemColumns.COLUMN_COMPLETED)),
-                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)))
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_PRIORITY)),
+                        getString(getColumnIndexOrThrow(ItemColumns.COLUMN_ALARM_DATE_TIME)))
                 items.add(item)
             }
         }
@@ -185,6 +188,7 @@ class ItemHelper(context: Context): DBHelper(context) {
         const val COLUMN_CATEGORY = "category"
         const val COLUMN_COMPLETED = "completed"
         const val COLUMN_PRIORITY = "priority"
+        const val COLUMN_ALARM_DATE_TIME = "alarm_date_time"
     }
 
     companion object {
@@ -194,7 +198,8 @@ class ItemHelper(context: Context): DBHelper(context) {
                 "${ItemColumns.COLUMN_DESCRIPTION} TEXT," +
                 "${ItemColumns.COLUMN_CATEGORY} TEXT," +
                 "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstans.COMPLETED_YES}','${ItemConstans.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstans.COMPLETED_NO}'," +
-                "${ItemColumns.COLUMN_PRIORITY} TEXT CHECK( ${ItemColumns.COLUMN_PRIORITY } IN ('${ItemConstans.PRIORITY_LOW}','${ItemConstans.PRIORITY_NORMAL}','${ItemConstans.PRIORITY_IMPORTANT}','${ItemConstans.PRIORITY_CRITICAL}') ) NOT NULL DEFAULT '${ItemConstans.PRIORITY_LOW}')"
+                "${ItemColumns.COLUMN_PRIORITY} TEXT CHECK( ${ItemColumns.COLUMN_PRIORITY } IN ('${ItemConstans.PRIORITY_LOW}','${ItemConstans.PRIORITY_NORMAL}','${ItemConstans.PRIORITY_IMPORTANT}','${ItemConstans.PRIORITY_CRITICAL}') ) NOT NULL DEFAULT '${ItemConstans.PRIORITY_LOW}'," +
+                "${ItemColumns.COLUMN_ALARM_DATE_TIME} TEXT)"
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"
 
@@ -205,6 +210,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 ItemColumns.COLUMN_DESCRIPTION,
                 ItemColumns.COLUMN_CATEGORY,
                 ItemColumns.COLUMN_COMPLETED,
-                ItemColumns.COLUMN_PRIORITY)
+                ItemColumns.COLUMN_PRIORITY,
+                ItemColumns.COLUMN_ALARM_DATE_TIME)
     }
 }

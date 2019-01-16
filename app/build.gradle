@@ -12,6 +12,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Using srcCompat Vector Drawables
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
