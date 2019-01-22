@@ -52,4 +52,6 @@
 
     <string name="title_select_time">Select Time:</string>
 
+    <string name="field_error_title">Error!\nTitle should not be blank.</string>
+    <string name="field_error_category">Error\nCategory should not be blank.</string>
 </resources>

@@ -47,4 +47,7 @@
     <string name="lbl_alarm_notification">Alarme de Notificação</string>
 
     <string name="title_select_time">Selecione a Hora:</string>
+
+    <string name="field_error_title">Erro!\nTítulo não deve ser vazio.</string>
+    <string name="field_error_category">Erro!\nCategoria não deve ser vazia.</string>
 </resources>

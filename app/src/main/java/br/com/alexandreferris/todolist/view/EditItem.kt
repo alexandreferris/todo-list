@@ -20,12 +20,13 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
+import org.apache.commons.lang3.StringUtils
 
 class EditItem : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var editItemVM: EditItemVM
     private var itemCreatedOrEdited: Boolean = false
-    private var itemId: Long = 0
+    // private var itemId: Long = 0
     private var item: Item = Item()
 
     // Toolbar MenuItem
@@ -80,11 +81,11 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
         // Retrieving Extras (if having any)
         if (intent.hasExtra(ActivityForResultEnum.ITEM_ID)) {
-            itemId = intent.getLongExtra(ActivityForResultEnum.ITEM_ID, 0)
+            this.item.id = intent.getLongExtra(ActivityForResultEnum.ITEM_ID, 0)
 
-            if (itemId > NumberUtils.LONG_ZERO) {
+            if (this.item.id > NumberUtils.LONG_ZERO) {
                 // Get Item with Observer
-                editItemVM.getItem(itemId).observe(this, Observer { item ->
+                editItemVM.getItem(this.item.id).observe(this, Observer { item ->
                     this.item = item!!
                     updateItemInformations()
                 })
@@ -92,7 +93,7 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         }
 
         // Enable all fields if Item has no itemId
-        if (itemId > NumberUtils.LONG_ZERO)
+        if (this.item.id > NumberUtils.LONG_ZERO)
             disableFieldsForEditing()
         else
             enableFieldsForEditing()
@@ -255,40 +256,46 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveItem() {
-        // Creates the Item to be saved
-        val item = Item(
-                itemId,
-                edtTitle.text.toString(),
-                edtDescription.text.toString(),
-                edtCategory.text.toString(),
-                item.completed,
-                when (sgPriorityButton.checkedRadioButtonId) {
-                    R.id.rbPriorityNormal -> ItemConstans.PRIORITY_NORMAL
-                    R.id.rbPriorityImportant -> ItemConstans.PRIORITY_IMPORTANT
-                    R.id.rbPriorityCritical -> ItemConstans.PRIORITY_CRITICAL
-                    else -> ItemConstans.PRIORITY_LOW
-                },
-                if (swAlarmNotification.isChecked) calendarAlarmDateTime.timeInMillis.toString() else NumberUtils.INTEGER_ZERO.toString()
-        )
+        try {
+            validateFields()
 
-        // Verify whether the Item needs to be created or updated
-        if (itemId == NumberUtils.LONG_ZERO)
-            itemCreatedOrEdited = editItemVM.saveItem(item)
-        else
-            itemCreatedOrEdited = editItemVM.updateItem(item)
+            // Creates the Item to be saved
+            val item = Item(
+                    this.item.id,
+                    edtTitle.text.toString(),
+                    edtDescription.text.toString(),
+                    edtCategory.text.toString(),
+                    item.completed,
+                    when (sgPriorityButton.checkedRadioButtonId) {
+                        R.id.rbPriorityNormal -> ItemConstans.PRIORITY_NORMAL
+                        R.id.rbPriorityImportant -> ItemConstans.PRIORITY_IMPORTANT
+                        R.id.rbPriorityCritical -> ItemConstans.PRIORITY_CRITICAL
+                        else -> ItemConstans.PRIORITY_LOW
+                    },
+                    if (swAlarmNotification.isChecked) calendarAlarmDateTime.timeInMillis.toString() else NumberUtils.INTEGER_ZERO.toString()
+            )
 
-        // Check if the Item has been saved successfully
-        if (itemCreatedOrEdited) {
-            // Check if the Item was updated, then make changes in the UI
-            if (itemId > NumberUtils.LONG_ZERO) {
-                editItemVM.loadItem(itemId)
-                disableFieldsForEditing()
-                mIeEdit.isVisible = true
-                mIeCancel.isVisible = false
-            }
-            Snackbar.make(findViewById(R.id.rlEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
-        } else
-            Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
+            // Verify whether the Item needs to be created or updated
+            if (this.item.id == NumberUtils.LONG_ZERO)
+                itemCreatedOrEdited = editItemVM.saveItem(item)
+            else
+                itemCreatedOrEdited = editItemVM.updateItem(item)
+
+            // Check if the Item has been saved successfully
+            if (itemCreatedOrEdited) {
+                // Check if the Item was updated, then make changes in the UI
+                if (this.item.id > NumberUtils.LONG_ZERO) {
+                    editItemVM.loadItem(this.item.id)
+                    disableFieldsForEditing()
+                    mIeEdit.isVisible = true
+                    mIeCancel.isVisible = false
+                }
+                Snackbar.make(findViewById(R.id.rlEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
+            } else
+                Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
+        } catch (inputMismatchException: InputMismatchException) {
+            Snackbar.make(findViewById(R.id.rlEditItem), inputMismatchException.message!!, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun showDatePicker() {
@@ -321,6 +328,13 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
         timePicker.setTitle(getString(R.string.title_select_time))
         timePicker.show()
+    }
+
+    private fun validateFields() {
+        if (StringUtils.isEmpty(edtTitle.text))
+            throw InputMismatchException(getString(R.string.field_error_title))
+        if (StringUtils.isEmpty(edtCategory.text))
+            throw InputMismatchException(getString(R.string.field_error_category))
     }
 
     override fun onClick(view: View?) {
