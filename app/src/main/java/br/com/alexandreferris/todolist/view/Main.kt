@@ -11,6 +11,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import br.com.alexandreferris.todolist.R
+import br.com.alexandreferris.todolist.di.DaggerAppComponent
+import br.com.alexandreferris.todolist.di.AppModule
+import br.com.alexandreferris.todolist.repository.remote.ItemHelper
 import br.com.alexandreferris.todolist.util.adapter.ItemAdapter
 import br.com.alexandreferris.todolist.util.alert.ItemRemoveDialog
 import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
@@ -18,11 +21,13 @@ import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import br.com.alexandreferris.todolist.viewmodel.MainVM
 import kotlinx.android.synthetic.main.activity_main.*
 import org.apache.commons.lang3.math.NumberUtils
+import javax.inject.Inject
 
 
 class Main : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var mainVM: MainVM
+    @Inject
+    lateinit var mainVM: MainVM
 
     // RecyclerView
     private lateinit var recyclerView: RecyclerView
@@ -42,7 +47,10 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     private fun initFields() {
         // ViewModel
-        mainVM = MainVM(this)
+        DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
+                .injectMain(this)
 
         // Button Click Listener
         fabAddNewItem.setOnClickListener(this)

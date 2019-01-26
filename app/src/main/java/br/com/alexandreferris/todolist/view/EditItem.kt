@@ -1,5 +1,6 @@
 package br.com.alexandreferris.todolist.view
 
+import android.app.*
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Typeface
@@ -16,17 +17,20 @@ import br.com.alexandreferris.todolist.viewmodel.EditItemVM
 import kotlinx.android.synthetic.main.activity_edit_item.*
 import org.apache.commons.lang3.math.NumberUtils
 import java.util.*
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.content.Context
 import android.content.DialogInterface
+import br.com.alexandreferris.todolist.di.DaggerAppComponent
+import br.com.alexandreferris.todolist.di.AppModule
 import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
+import br.com.alexandreferris.todolist.util.notification.NotificationReceiver
 import org.apache.commons.lang3.StringUtils
+import javax.inject.Inject
 
 class EditItem : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var editItemVM: EditItemVM
-    private var itemCreatedOrEdited: Boolean = false
-    // private var itemId: Long = 0
+    @Inject
+    lateinit var editItemVM: EditItemVM
+    private var itemCreatedOrEdited: Long = NumberUtils.LONG_ZERO
     private var item: Item = Item()
 
     // Toolbar MenuItem
@@ -39,6 +43,8 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     private lateinit var listenerDatePicker: DatePickerDialog.OnDateSetListener
     private lateinit var listenerTimePicker: TimePickerDialog.OnTimeSetListener
 
+    private lateinit var alarmManager: AlarmManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_item)
@@ -48,13 +54,18 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
     private fun initFields() {
         // ViewModel
-        editItemVM = EditItemVM(this)
+        DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
+                .injectEditItem(this)
+
+        alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // Button Click Listener
         btnSave.setOnClickListener(this)
 
         // Hide and Show alarm fields
-        swAlarmNotification.setOnCheckedChangeListener { compoundButton, checked ->
+        swAlarmNotification.setOnCheckedChangeListener { _, checked ->
             clAlarmDateTime.visibility = if (checked) View.VISIBLE else View.GONE
         }
 
@@ -63,14 +74,14 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         updateAlarmDateTime()
 
         // Listeners for Alarm date and time picker
-        listenerDatePicker = DatePickerDialog.OnDateSetListener { datePicker, year, month, dayOfMonth ->
+        listenerDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendarAlarmDateTime.set(Calendar.YEAR, year)
             calendarAlarmDateTime.set(Calendar.MONTH, month)
             calendarAlarmDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateAlarmDateTime()
         }
 
-        listenerTimePicker = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+        listenerTimePicker = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             calendarAlarmDateTime.set(Calendar.HOUR_OF_DAY, hour)
             calendarAlarmDateTime.set(Calendar.MINUTE, minute)
             updateAlarmDateTime()
@@ -94,9 +105,9 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
         // Enable all fields if Item has no itemId
         if (this.item.id > NumberUtils.LONG_ZERO)
-            disableFieldsForEditing()
+            enableDisableFieldsForEditing(false)
         else
-            enableFieldsForEditing()
+            enableDisableFieldsForEditing(true)
     }
 
     private fun updateAlarmDateTime() {
@@ -122,13 +133,13 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             R.id.ieEdit -> {
                 mIeEdit.isVisible = false
                 mIeCancel.isVisible = true
-                enableFieldsForEditing()
+                enableDisableFieldsForEditing(true)
                 return true
             }
             R.id.ieCancel -> {
                 mIeEdit.isVisible = true
                 mIeCancel.isVisible = false
-                disableFieldsForEditing()
+                enableDisableFieldsForEditing(false)
                 return true
             }
         }
@@ -170,89 +181,57 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun enableFieldsForEditing() {
+    private fun enableDisableFieldsForEditing(enable: Boolean) {
         // Enabling EditText Fields
-        edtTitle.isEnabled = true
-        edtCategory.isEnabled = true
-        edtDescription.isEnabled = true
+        edtTitle.isEnabled = enable
+        edtCategory.isEnabled = enable
+        edtDescription.isEnabled = enable
 
         // Changing Text Appearance
-        edtTitle.textSize = "14.0".toFloat()
-        edtTitle.typeface = Typeface.DEFAULT
+        edtTitle.textSize = if (enable) "14.0".toFloat() else "18.0".toFloat()
+        edtTitle.typeface = if (enable) Typeface.DEFAULT else Typeface.DEFAULT_BOLD
 
-        txtItemSpaceLine.setBackgroundColor(resources.getColor(R.color.gray_slight_dark))
+        txtItemSpaceLine.setBackgroundColor(if (enable) resources.getColor(R.color.gray_slight_dark) else resources.getColor(R.color.colorAccent))
 
         // Setting default background to EditText Fields
-        edtTitle.background = resources.getDrawable(R.drawable.border_full_green)
-        edtCategory.background = resources.getDrawable(R.drawable.border_full_gray)
-        edtDescription.background = resources.getDrawable(R.drawable.border_full_gray)
+        edtTitle.background = if (enable) resources.getDrawable(R.drawable.border_full_green) else null
+        edtCategory.background = if (enable) resources.getDrawable(R.drawable.border_full_gray) else null
+        edtDescription.background = if (enable) resources.getDrawable(R.drawable.border_full_gray) else null
 
         // Add onFocus to change background of EditText Fields
-        edtTitle.setOnFocusChangeListener { view, focused ->
-            updateEditTextBackground(edtTitle, view, focused)
-        }
-        edtCategory.setOnFocusChangeListener { view, focused ->
-            updateEditTextBackground(edtCategory, view, focused)
-        }
-        edtDescription.setOnFocusChangeListener { view, focused ->
-            updateEditTextBackground(edtDescription, view, focused)
+        if (enable) {
+            edtTitle.setOnFocusChangeListener { view, focused ->
+                updateEditTextBackground(edtTitle, view, focused)
+            }
+            edtCategory.setOnFocusChangeListener { view, focused ->
+                updateEditTextBackground(edtCategory, view, focused)
+            }
+            edtDescription.setOnFocusChangeListener { view, focused ->
+                updateEditTextBackground(edtDescription, view, focused)
+            }
+        } else {
+            edtTitle.onFocusChangeListener = null
+            edtCategory.onFocusChangeListener = null
+            edtDescription.onFocusChangeListener = null
         }
 
         // Enabling Priority Buttons
-        rbPriorityLow.isEnabled = true
-        rbPriorityNormal.isEnabled = true
-        rbPriorityImportant.isEnabled = true
-        rbPriorityCritical.isEnabled = true
+        rbPriorityLow.isEnabled = enable
+        rbPriorityNormal.isEnabled = enable
+        rbPriorityImportant.isEnabled = enable
+        rbPriorityCritical.isEnabled = enable
 
         // Enabling Save Button
-        btnSave.visibility = View.VISIBLE
-        btnSave.isEnabled = true
+        btnSave.visibility = if (enable) View.VISIBLE else View.GONE
+        btnSave.isEnabled = enable
 
         // Enabling Date and Time
-        swAlarmNotification.isEnabled = true
-        ivAlarmDate.isEnabled = true
-        ivAlarmTime.isEnabled = true
-    }
+        swAlarmNotification.isEnabled = enable
+        ivAlarmDate.isEnabled = enable
+        ivAlarmTime.isEnabled = enable
 
-    private fun disableFieldsForEditing() {
-        // Disabling EditText Fields
-        edtTitle.isEnabled = false
-        edtCategory.isEnabled = false
-        edtDescription.isEnabled = false
-
-        // Changing Text Appearance to default
-        edtTitle.textSize = "18.0".toFloat()
-        edtTitle.typeface = Typeface.DEFAULT_BOLD
-
-        txtItemSpaceLine.setBackgroundColor(resources.getColor(R.color.colorAccent))
-
-        // Setting default background to EditText Fields
-        edtTitle.background = null
-        edtCategory.background = null
-        edtDescription.background = null
-
-        // Remove onFocus to change background of EditText Fields
-        edtTitle.onFocusChangeListener = null
-        edtCategory.onFocusChangeListener = null
-        edtDescription.onFocusChangeListener = null
-
-        // Disabling Priority Buttons
-        rbPriorityLow.isEnabled = false
-        rbPriorityNormal.isEnabled = false
-        rbPriorityImportant.isEnabled = false
-        rbPriorityCritical.isEnabled = false
-
-        // Disabling Save Button
-        btnSave.visibility = View.GONE
-        btnSave.isEnabled = false
-
-        // Disabling Date and Time
-        swAlarmNotification.isEnabled = false
-        ivAlarmDate.isEnabled = false
-        ivAlarmTime.isEnabled = false
-
-        // Remove any changes made
-        updateItemInformations()
+        if (!enable)
+            updateItemInformations()
     }
 
     private fun saveItem() {
@@ -282,14 +261,20 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
                 itemCreatedOrEdited = editItemVM.updateItem(item)
 
             // Check if the Item has been saved successfully
-            if (itemCreatedOrEdited) {
+            if (itemCreatedOrEdited > NumberUtils.LONG_ZERO) {
                 // Check if the Item was updated, then make changes in the UI
                 if (this.item.id > NumberUtils.LONG_ZERO) {
                     editItemVM.loadItem(this.item.id)
-                    disableFieldsForEditing()
+                    enableDisableFieldsForEditing(false)
                     mIeEdit.isVisible = true
                     mIeCancel.isVisible = false
                 }
+
+                item.id = itemCreatedOrEdited
+
+                // Set the notification alarm
+                setNotification(item)
+
                 Snackbar.make(findViewById(R.id.rlEditItem), R.string.success_save_item, Snackbar.LENGTH_LONG).show()
             } else
                 Snackbar.make(findViewById(R.id.rlEditItem), R.string.error_save_item, Snackbar.LENGTH_LONG).show()
@@ -337,6 +322,33 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
             throw InputMismatchException(getString(R.string.field_error_category))
     }
 
+    private fun setNotification(item: Item) {
+        if (item.alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
+            // Create a calendar to get the correct time for the notification to popup.
+            val calendarAlarmDateTime = Calendar.getInstance()
+            calendarAlarmDateTime.timeInMillis = item.alarmDateTime.toLong()
+            calendarAlarmDateTime.set(Calendar.SECOND, 0)
+
+            // Intent to hold Item information
+            val informationIntent = Intent(this, NotificationReceiver::class.java)
+            informationIntent.putExtra("ITEM_ID", item.id)
+            informationIntent.putExtra("ITEM_TITLE", item.title)
+            informationIntent.putExtra("ITEM_DESCRIPTION", item.description)
+            informationIntent.putExtra("ITEM_PRIORITY", item.priority)
+
+            val pendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                    this,
+                    item.id.toInt(),
+                    informationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+
+            if (android.os.Build.VERSION.SDK_INT >= 19)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarAlarmDateTime.timeInMillis, pendingIntent)
+            else
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendarAlarmDateTime.timeInMillis, pendingIntent)
+        }
+    }
+
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btnSave -> saveItem()
@@ -347,7 +359,7 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         val parentScreen = Intent()
-        parentScreen.putExtra(ActivityForResultEnum.ITEM_CREATED_OR_EDITED, itemCreatedOrEdited)
+        parentScreen.putExtra(ActivityForResultEnum.ITEM_CREATED_OR_EDITED, (itemCreatedOrEdited > NumberUtils.LONG_ZERO))
         setResult(ActivityForResultEnum.ADD_OR_EDIT_ITEM, parentScreen)
 
         super.onBackPressed()

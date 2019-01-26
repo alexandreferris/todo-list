@@ -7,9 +7,9 @@ import android.provider.BaseColumns
 import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.util.constants.ItemConstans
 import org.apache.commons.lang3.math.NumberUtils
+import javax.inject.Inject
 
-
-class ItemHelper(context: Context): DBHelper(context) {
+class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
@@ -49,7 +49,7 @@ class ItemHelper(context: Context): DBHelper(context) {
      * @param Item
      * @return Boolean
      */
-    fun updateItem(item: Item): Boolean {
+    fun updateItem(item: Item): Long {
         // New values
         val values = ContentValues().apply {
             put(ItemColumns.COLUMN_TITLE, item.title)
@@ -68,7 +68,7 @@ class ItemHelper(context: Context): DBHelper(context) {
                 selection,
                 selectionArgs)
 
-        return (count > NumberUtils.INTEGER_ZERO)
+        return if (count > NumberUtils.LONG_ZERO) item.id else NumberUtils.LONG_ZERO
     }
 
     fun updateItemCompleted(itemId: Long, completed: String): Boolean {

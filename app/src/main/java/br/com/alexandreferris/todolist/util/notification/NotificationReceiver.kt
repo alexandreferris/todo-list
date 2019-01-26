@@ -1,5 +1,7 @@
 package br.com.alexandreferris.todolist.util.notification
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -30,8 +32,24 @@ class NotificationReceiver: BroadcastReceiver() {
                 contentIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            val importanceLevel = NotificationManager.IMPORTANCE_LOW
+            when (receivedIntent.getStringExtra("ITEM_PRIORITY")) {
+                ItemConstans.PRIORITY_NORMAL, ItemConstans.PRIORITY_IMPORTANT -> NotificationManager.IMPORTANCE_DEFAULT
+                ItemConstans.PRIORITY_CRITICAL -> NotificationManager.IMPORTANCE_HIGH
+            }
+
+            val notificationChannel = NotificationChannel(ItemConstans.NOTIFICATION_CHANNEL_ID, ItemConstans.NOTIFICATION_CHANNEL_ID, importanceLevel)
+            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(true)
+
+            val manager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+            manager.createNotificationChannel(notificationChannel)
+        }
+
         val notificationBuilder = NotificationCompat.Builder(context, ItemConstans.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(receivedIntent?.getStringExtra("ITEM_TITLE"))
                 .setContentText("${receivedIntent?.getStringExtra("ITEM_DESCRIPTION")}...")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -39,6 +57,7 @@ class NotificationReceiver: BroadcastReceiver() {
                 .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
+            this.
             notify(itemId!!.toInt(), notificationBuilder.build())
         }
     }
