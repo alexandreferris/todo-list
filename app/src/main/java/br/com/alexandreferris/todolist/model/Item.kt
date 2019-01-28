@@ -1,14 +1,14 @@
 package br.com.alexandreferris.todolist.model
 
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 
 class Item {
     var id: Long = 0
     var title: String = ""
     var description: String = ""
     var category: String = ""
-    var completed: String = ItemConstans.COMPLETED_YES
-    var priority: String = ItemConstans.PRIORITY_LOW
+    var completed: String = ItemConstants.COMPLETED_NO
+    var priority: String = ItemConstants.PRIORITY_LOW
     var alarmDateTime: String = "0"
 
     constructor()

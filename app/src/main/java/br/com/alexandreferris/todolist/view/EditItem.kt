@@ -12,7 +12,7 @@ import android.widget.EditText
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
 import br.com.alexandreferris.todolist.model.Item
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import br.com.alexandreferris.todolist.viewmodel.EditItemVM
 import kotlinx.android.synthetic.main.activity_edit_item.*
 import org.apache.commons.lang3.math.NumberUtils
@@ -23,6 +23,8 @@ import br.com.alexandreferris.todolist.di.DaggerAppComponent
 import br.com.alexandreferris.todolist.di.AppModule
 import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
 import br.com.alexandreferris.todolist.util.notification.NotificationReceiver
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import org.apache.commons.lang3.StringUtils
 import javax.inject.Inject
 
@@ -48,6 +50,7 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_item)
+        Fabric.with(this, Crashlytics())
 
         initFields()
     }
@@ -154,9 +157,9 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
 
         // Priority Buttons
         when (item.priority) {
-            ItemConstans.PRIORITY_NORMAL -> rbPriorityNormal.isChecked = true
-            ItemConstans.PRIORITY_IMPORTANT -> rbPriorityImportant.isChecked = true
-            ItemConstans.PRIORITY_CRITICAL -> rbPriorityCritical.isChecked = true
+            ItemConstants.PRIORITY_NORMAL -> rbPriorityNormal.isChecked = true
+            ItemConstants.PRIORITY_IMPORTANT -> rbPriorityImportant.isChecked = true
+            ItemConstants.PRIORITY_CRITICAL -> rbPriorityCritical.isChecked = true
             else -> rbPriorityLow.isChecked = true
         }
 
@@ -246,10 +249,10 @@ class EditItem : AppCompatActivity(), View.OnClickListener {
                     edtCategory.text.toString(),
                     item.completed,
                     when (sgPriorityButton.checkedRadioButtonId) {
-                        R.id.rbPriorityNormal -> ItemConstans.PRIORITY_NORMAL
-                        R.id.rbPriorityImportant -> ItemConstans.PRIORITY_IMPORTANT
-                        R.id.rbPriorityCritical -> ItemConstans.PRIORITY_CRITICAL
-                        else -> ItemConstans.PRIORITY_LOW
+                        R.id.rbPriorityNormal -> ItemConstants.PRIORITY_NORMAL
+                        R.id.rbPriorityImportant -> ItemConstants.PRIORITY_IMPORTANT
+                        R.id.rbPriorityCritical -> ItemConstants.PRIORITY_CRITICAL
+                        else -> ItemConstants.PRIORITY_LOW
                     },
                     if (swAlarmNotification.isChecked) calendarAlarmDateTime.timeInMillis.toString() else NumberUtils.INTEGER_ZERO.toString()
             )

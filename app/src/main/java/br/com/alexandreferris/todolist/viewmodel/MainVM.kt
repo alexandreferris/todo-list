@@ -3,12 +3,13 @@ package br.com.alexandreferris.todolist.viewmodel
 import android.arch.lifecycle.LiveData
 import br.com.alexandreferris.todolist.model.Item
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import br.com.alexandreferris.todolist.repository.remote.ItemHelper
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import javax.inject.Inject
 
 
-open class MainVM @Inject constructor(private val itemHelper: ItemHelper): BaseVM() {
+open class MainVM @Inject constructor(private val itemHelper: ItemHelper): ViewModel() {
     private val itemList: MutableLiveData<ArrayList<Item>> = MutableLiveData()
 
     fun loadItems() {
@@ -35,7 +36,7 @@ open class MainVM @Inject constructor(private val itemHelper: ItemHelper): BaseV
     }
 
     fun updateItemCompleted(itemId: Long, checked: Boolean): Boolean {
-        val updateItemCompletedResult = itemHelper.updateItemCompleted(itemId, if (checked) ItemConstans.COMPLETED_YES else ItemConstans.COMPLETED_NO)
+        val updateItemCompletedResult = itemHelper.updateItemCompleted(itemId, if (checked) ItemConstants.COMPLETED_YES else ItemConstants.COMPLETED_NO)
 
         if (updateItemCompletedResult)
             this.loadItems()

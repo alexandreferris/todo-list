@@ -5,11 +5,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import br.com.alexandreferris.todolist.model.Item
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import org.apache.commons.lang3.math.NumberUtils
 import javax.inject.Inject
 
-class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
+open class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
@@ -39,9 +39,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
         }
 
         // Insert the new row, returning the primary key value of the new row
-        val newRowId = this.writableDatabase.insert(ItemColumns.TABLE_NAME, null, values)
-
-        return newRowId
+        return writableDatabase.insert(ItemColumns.TABLE_NAME, null, values)
     }
 
     /**
@@ -62,7 +60,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
         // Which row to update, based on the ID
         val selection = "${ItemColumns.COLUMN_ID} = ?"
         val selectionArgs = arrayOf(item.id.toString())
-        val count = this.writableDatabase.update(
+        val count = writableDatabase.update(
                 ItemColumns.TABLE_NAME,
                 values,
                 selection,
@@ -80,7 +78,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
         // Which row to update, based on the ID
         val selection = "${ItemColumns.COLUMN_ID} = ?"
         val selectionArgs = arrayOf(itemId.toString())
-        val count = this.writableDatabase.update(
+        val count = writableDatabase.update(
                 ItemColumns.TABLE_NAME,
                 values,
                 selection,
@@ -95,7 +93,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
 
         val sortOrder = ItemColumns.COLUMN_ID + " ASC"
 
-        val cursor = this.readableDatabase.query(
+        val cursor = readableDatabase.query(
                 ItemColumns.TABLE_NAME, // The table to query
                 allColumnsProjection, // The array of columns to return (pass null to get all)
                 where, // The columns for the WHERE clause
@@ -133,7 +131,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
         // Specify arguments in placeholder order.
         val selectionArgs = arrayOf(itemId.toString())
         // Issue SQL statement.
-        val deletedRows = this.writableDatabase.delete(ItemColumns.TABLE_NAME, selection, selectionArgs)
+        val deletedRows = writableDatabase.delete(ItemColumns.TABLE_NAME, selection, selectionArgs)
 
         return (deletedRows > NumberUtils.INTEGER_ZERO)
     }
@@ -152,7 +150,7 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
         // How you want the results sorted in the resulting Cursor
         val sortOrder = "${ItemColumns.COLUMN_ID} DESC"
 
-        val cursor = this.readableDatabase.query(
+        val cursor = readableDatabase.query(
                 ItemColumns.TABLE_NAME,   // The table to query
                 allColumnsProjection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
@@ -197,8 +195,8 @@ class ItemHelper @Inject constructor(context: Context): DBHelper(context) {
                 "${ItemColumns.COLUMN_TITLE} TEXT," +
                 "${ItemColumns.COLUMN_DESCRIPTION} TEXT," +
                 "${ItemColumns.COLUMN_CATEGORY} TEXT," +
-                "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstans.COMPLETED_YES}','${ItemConstans.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstans.COMPLETED_NO}'," +
-                "${ItemColumns.COLUMN_PRIORITY} TEXT CHECK( ${ItemColumns.COLUMN_PRIORITY } IN ('${ItemConstans.PRIORITY_LOW}','${ItemConstans.PRIORITY_NORMAL}','${ItemConstans.PRIORITY_IMPORTANT}','${ItemConstans.PRIORITY_CRITICAL}') ) NOT NULL DEFAULT '${ItemConstans.PRIORITY_LOW}'," +
+                "${ItemColumns.COLUMN_COMPLETED} TEXT CHECK( ${ItemColumns.COLUMN_COMPLETED } IN ('${ItemConstants.COMPLETED_YES}','${ItemConstants.COMPLETED_NO}') ) NOT NULL DEFAULT '${ItemConstants.COMPLETED_NO}'," +
+                "${ItemColumns.COLUMN_PRIORITY} TEXT CHECK( ${ItemColumns.COLUMN_PRIORITY } IN ('${ItemConstants.PRIORITY_LOW}','${ItemConstants.PRIORITY_NORMAL}','${ItemConstants.PRIORITY_IMPORTANT}','${ItemConstants.PRIORITY_CRITICAL}') ) NOT NULL DEFAULT '${ItemConstants.PRIORITY_LOW}'," +
                 "${ItemColumns.COLUMN_ALARM_DATE_TIME} TEXT)"
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${ItemColumns.TABLE_NAME}"

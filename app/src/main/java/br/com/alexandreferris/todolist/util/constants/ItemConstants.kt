@@ -1,8 +1,6 @@
 package br.com.alexandreferris.todolist.util.constants
 
-import org.apache.commons.lang3.math.NumberUtils
-
-open class ItemConstans {
+open class ItemConstants {
 
     companion object {
         const val COMPLETED_YES = "YES"

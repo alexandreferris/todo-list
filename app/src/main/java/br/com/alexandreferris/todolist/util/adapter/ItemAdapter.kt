@@ -7,16 +7,16 @@ import android.view.ViewGroup
 
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.model.Item
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import br.com.alexandreferris.todolist.util.datetime.DateTimeUtil
 import kotlinx.android.synthetic.main.list_item.view.*
 import org.apache.commons.lang3.math.NumberUtils
 import java.util.*
 
-class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCompletedListener: (Long, Boolean) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
+class ItemAdapter(private val itemClickListener: (Long, Boolean) -> Unit, private val checkboxCompletedListener: (Long, Boolean) -> Unit): RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
 
     private var itemList: ArrayList<Item> = ArrayList<Item>()
-    var itemListCompleted: String = ItemConstans.COMPLETED_NO
+    var itemListCompleted: String = ItemConstants.COMPLETED_NO
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -50,18 +50,18 @@ class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCo
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // Item background based on Priority Level
-        var cardBackgroundColor: Int
-        var cardStatusBackgroundColor: Int
+        val cardBackgroundColor: Int
+        val cardStatusBackgroundColor: Int
         when (itemList[position].priority) {
-            ItemConstans.PRIORITY_NORMAL -> {
+            ItemConstants.PRIORITY_NORMAL -> {
                 cardBackgroundColor = R.drawable.border_full_priority_normal
                 cardStatusBackgroundColor = R.drawable.border_left_priority_normal
             }
-            ItemConstans.PRIORITY_IMPORTANT -> {
+            ItemConstants.PRIORITY_IMPORTANT -> {
                 cardBackgroundColor = R.drawable.border_full_priority_important
                 cardStatusBackgroundColor = R.drawable.border_left_priority_important
             }
-            ItemConstans.PRIORITY_CRITICAL -> {
+            ItemConstants.PRIORITY_CRITICAL -> {
                 cardBackgroundColor = R.drawable.border_full_priority_critical
                 cardStatusBackgroundColor = R.drawable.border_left_priority_critical
             }
@@ -79,11 +79,11 @@ class ItemAdapter(val itemClickListener: (Long, Boolean) -> Unit, val checkboxCo
         holder.view.txtItemCategory.text = itemList[position].category
 
         // Completed Status
-        holder.view.chkCompleted.isChecked = (itemList[position].completed.compareTo(ItemConstans.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
+        holder.view.chkCompleted.isChecked = (itemList[position].completed.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
         holder.view.chkCompleted.setOnCheckedChangeListener { _, checked ->
             checkboxCompletedListener.invoke(itemList[position].id, checked)
-            if ((itemListCompleted.compareTo(ItemConstans.COMPLETED_YES) == NumberUtils.INTEGER_ZERO && !checked)
-                    ||(itemListCompleted.compareTo(ItemConstans.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked) )
+            if ((itemListCompleted.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO && !checked)
+                    ||(itemListCompleted.compareTo(ItemConstants.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked) )
                     notifyDataSetChanged()
         }
 

@@ -2,13 +2,14 @@ package br.com.alexandreferris.todolist.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import br.com.alexandreferris.todolist.model.Item
 import br.com.alexandreferris.todolist.repository.remote.ItemHelper
 import org.apache.commons.lang3.math.NumberUtils
 import javax.inject.Inject
 
 
-open class EditItemVM @Inject constructor(private val itemHelper: ItemHelper): BaseVM() {
+open class EditItemVM @Inject constructor(private val itemHelper: ItemHelper): ViewModel() {
     private val item: MutableLiveData<Item> = MutableLiveData()
 
     /**

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.alexandreferris.todolist">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="br.com.alexandreferris.todolist">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -9,6 +10,12 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Fabric Crashlytics -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="API_KEY_FROM_FABRIC_IO" />
+
         <activity android:name=".view.Main">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

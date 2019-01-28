@@ -13,15 +13,17 @@ import android.view.View
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.di.DaggerAppComponent
 import br.com.alexandreferris.todolist.di.AppModule
-import br.com.alexandreferris.todolist.repository.remote.ItemHelper
 import br.com.alexandreferris.todolist.util.adapter.ItemAdapter
 import br.com.alexandreferris.todolist.util.alert.ItemRemoveDialog
 import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import br.com.alexandreferris.todolist.viewmodel.MainVM
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import org.apache.commons.lang3.math.NumberUtils
 import javax.inject.Inject
+
 
 
 class Main : AppCompatActivity(), View.OnClickListener {
@@ -41,6 +43,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Fabric.with(this, Crashlytics())
 
         initFields()
     }
@@ -89,7 +92,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
             if (viewAdapter.itemCount > NumberUtils.INTEGER_ZERO)
                 rvItems.visibility = View.VISIBLE
             else {
-                if (viewAdapter.itemListCompleted == ItemConstans.COMPLETED_NO)
+                if (viewAdapter.itemListCompleted == ItemConstants.COMPLETED_NO)
                     txtNoUncompleted.visibility = View.VISIBLE
                 else
                     txtNoCompleted.visibility = View.VISIBLE
@@ -111,7 +114,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
     private fun updateItemListing(showCompleted: Boolean) {
         mIeCompleted.isVisible = !showCompleted
         mIeUncompleted.isVisible = showCompleted
-        viewAdapter.itemListCompleted = if (showCompleted) ItemConstans.COMPLETED_YES else ItemConstans.COMPLETED_NO
+        viewAdapter.itemListCompleted = if (showCompleted) ItemConstants.COMPLETED_YES else ItemConstants.COMPLETED_NO
         txtCompleted.visibility = if (showCompleted) View.VISIBLE else View.GONE
         mainVM.loadItems()
         viewAdapter.notifyDataSetChanged()
@@ -179,7 +182,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when(view?.id) {
-            R.id.fabAddNewItem -> showAddNewItemScreen(0)
+            R.id.fabAddNewItem -> showAddNewItemScreen(NumberUtils.LONG_ZERO)
         }
     }
 }

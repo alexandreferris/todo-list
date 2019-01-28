@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import br.com.alexandreferris.todolist.R
 import br.com.alexandreferris.todolist.util.constants.ActivityForResultEnum
-import br.com.alexandreferris.todolist.util.constants.ItemConstans
+import br.com.alexandreferris.todolist.util.constants.ItemConstants
 import br.com.alexandreferris.todolist.view.EditItem
 import org.apache.commons.lang3.math.NumberUtils
 
@@ -36,11 +36,11 @@ class NotificationReceiver: BroadcastReceiver() {
 
             val importanceLevel = NotificationManager.IMPORTANCE_LOW
             when (receivedIntent.getStringExtra("ITEM_PRIORITY")) {
-                ItemConstans.PRIORITY_NORMAL, ItemConstans.PRIORITY_IMPORTANT -> NotificationManager.IMPORTANCE_DEFAULT
-                ItemConstans.PRIORITY_CRITICAL -> NotificationManager.IMPORTANCE_HIGH
+                ItemConstants.PRIORITY_NORMAL, ItemConstants.PRIORITY_IMPORTANT -> NotificationManager.IMPORTANCE_DEFAULT
+                ItemConstants.PRIORITY_CRITICAL -> NotificationManager.IMPORTANCE_HIGH
             }
 
-            val notificationChannel = NotificationChannel(ItemConstans.NOTIFICATION_CHANNEL_ID, ItemConstans.NOTIFICATION_CHANNEL_ID, importanceLevel)
+            val notificationChannel = NotificationChannel(ItemConstants.NOTIFICATION_CHANNEL_ID, ItemConstants.NOTIFICATION_CHANNEL_ID, importanceLevel)
             notificationChannel.enableLights(true)
             notificationChannel.enableVibration(true)
 
@@ -48,17 +48,17 @@ class NotificationReceiver: BroadcastReceiver() {
             manager.createNotificationChannel(notificationChannel)
         }
 
-        val notificationBuilder = NotificationCompat.Builder(context, ItemConstans.NOTIFICATION_CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(context, ItemConstants.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(receivedIntent?.getStringExtra("ITEM_TITLE"))
-                .setContentText("${receivedIntent?.getStringExtra("ITEM_DESCRIPTION")}...")
+                .setContentTitle(receivedIntent.getStringExtra("ITEM_TITLE"))
+                .setContentText("${receivedIntent.getStringExtra("ITEM_DESCRIPTION")}...")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
             this.
-            notify(itemId!!.toInt(), notificationBuilder.build())
+            notify(itemId.toInt(), notificationBuilder.build())
         }
     }
 }

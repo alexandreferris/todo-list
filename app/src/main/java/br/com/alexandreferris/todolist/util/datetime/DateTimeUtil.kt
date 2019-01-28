@@ -24,7 +24,7 @@ open class DateTimeUtil {
          */
         fun correctDayAndMonth(day: Int, month: Int, year: Int): String {
             val dayZero = if (day >= 10) Integer.toString(day) else String.format("0%s", Integer.toString(day))
-            var monthZero = if (month >= 10) Integer.toString(month + 1) else String.format("0%s", Integer.toString(month + 1))
+            val monthZero = if (month >= 10) Integer.toString(month + 1) else String.format("0%s", Integer.toString(month + 1))
 
             return "$dayZero/$monthZero/$year"
         }
