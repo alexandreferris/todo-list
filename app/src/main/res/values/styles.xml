@@ -23,4 +23,36 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="rbPriorityLow"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_low</item>
+        <item name="android:colorControlActivated">@color/priority_low</item>
+        <item name="android:colorControlHighlight">@color/priority_low</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_low</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityNormal"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_normal</item>
+        <item name="android:colorControlActivated">@color/priority_normal</item>
+        <item name="android:colorControlHighlight">@color/priority_normal</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_normal</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityImportant"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_important</item>
+        <item name="android:colorControlActivated">@color/priority_important</item>
+        <item name="android:colorControlHighlight">@color/priority_important</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_important</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityCritical"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_critical</item>
+        <item name="android:colorControlActivated">@color/priority_critical</item>
+        <item name="android:colorControlHighlight">@color/priority_critical</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_critical</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
 </resources>
