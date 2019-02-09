@@ -52,51 +52,56 @@ class ItemAdapter(private val itemClickListener: (Long, Boolean) -> Unit, privat
         // Item background based on Priority Level
         val cardBackgroundColor: Int
         val cardStatusBackgroundColor: Int
-        when (itemList[position].priority) {
-            ItemConstants.PRIORITY_NORMAL -> {
-                cardBackgroundColor = R.drawable.border_full_priority_normal
-                cardStatusBackgroundColor = R.drawable.border_left_priority_normal
-            }
-            ItemConstants.PRIORITY_IMPORTANT -> {
-                cardBackgroundColor = R.drawable.border_full_priority_important
-                cardStatusBackgroundColor = R.drawable.border_left_priority_important
-            }
-            ItemConstants.PRIORITY_CRITICAL -> {
-                cardBackgroundColor = R.drawable.border_full_priority_critical
-                cardStatusBackgroundColor = R.drawable.border_left_priority_critical
-            }
-            else -> {
-                cardBackgroundColor = R.drawable.border_full_priority_low
-                cardStatusBackgroundColor = R.drawable.border_left_priority_low
-            }
-        }
+        if (position <= itemList.size) {
+            val item = itemList[position]
 
-        holder.view.clItemCard.background = holder.view.resources.getDrawable(cardBackgroundColor)
-        holder.view.txtItemStatusBG.background = holder.view.resources.getDrawable(cardStatusBackgroundColor)
+            when (item.priority) {
+                ItemConstants.PRIORITY_NORMAL -> {
+                    cardBackgroundColor = R.drawable.border_full_priority_normal
+                    cardStatusBackgroundColor = R.drawable.border_left_priority_normal
+                }
+                ItemConstants.PRIORITY_IMPORTANT -> {
+                    cardBackgroundColor = R.drawable.border_full_priority_important
+                    cardStatusBackgroundColor = R.drawable.border_left_priority_important
+                }
+                ItemConstants.PRIORITY_CRITICAL -> {
+                    cardBackgroundColor = R.drawable.border_full_priority_critical
+                    cardStatusBackgroundColor = R.drawable.border_left_priority_critical
+                }
+                else -> {
+                    cardBackgroundColor = R.drawable.border_full_priority_low
+                    cardStatusBackgroundColor = R.drawable.border_left_priority_low
+                }
+            }
 
-        // Name and Category
-        holder.view.txtItemName.text = itemList[position].title
-        holder.view.txtItemCategory.text = itemList[position].category
+            holder.view.clItemCard.background = holder.view.resources.getDrawable(cardBackgroundColor)
+            holder.view.txtItemStatusBG.background = holder.view.resources.getDrawable(cardStatusBackgroundColor)
 
-        // Completed Status
-        holder.view.chkCompleted.isChecked = (itemList[position].completed.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
-        holder.view.chkCompleted.setOnCheckedChangeListener { _, checked ->
-            checkboxCompletedListener.invoke(itemList[position].id, checked)
-            if ((itemListCompleted.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO && !checked)
-                    ||(itemListCompleted.compareTo(ItemConstants.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked) )
+            // Name and Category
+            holder.view.txtItemName.text = item.title
+            holder.view.txtItemCategory.text = item.category
+
+            // Completed Status
+            holder.view.chkCompleted.setOnCheckedChangeListener(null)
+            holder.view.chkCompleted.isChecked = (item.completed.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO)
+            holder.view.chkCompleted.setOnCheckedChangeListener { _, checked ->
+                checkboxCompletedListener.invoke(item.id, checked)
+                if ((itemListCompleted.compareTo(ItemConstants.COMPLETED_YES) == NumberUtils.INTEGER_ZERO && !checked)
+                        || (itemListCompleted.compareTo(ItemConstants.COMPLETED_NO) == NumberUtils.INTEGER_ZERO && checked))
                     notifyDataSetChanged()
-        }
+            }
 
-        // Date and Time
-        hideShowDateTimeFields(holder, false)
-        if (itemList[position].alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
-            hideShowDateTimeFields(holder, true)
+            // Date and Time
+            hideShowDateTimeFields(holder, false)
+            if (item.alarmDateTime.toLong() > NumberUtils.LONG_ZERO) {
+                hideShowDateTimeFields(holder, true)
 
-            val calendarDateTime = Calendar.getInstance()
-            calendarDateTime.timeInMillis = itemList[position].alarmDateTime.toLong()
+                val calendarDateTime = Calendar.getInstance()
+                calendarDateTime.timeInMillis = item.alarmDateTime.toLong()
 
-            holder.view.txtDate.text = DateTimeUtil.correctDayAndMonth(calendarDateTime.get(Calendar.DAY_OF_MONTH), calendarDateTime.get(Calendar.MONTH), calendarDateTime.get(Calendar.YEAR))
-            holder.view.txtTime.text = DateTimeUtil.addLeadingZeroToTime(calendarDateTime.get(Calendar.HOUR_OF_DAY), calendarDateTime.get(Calendar.MINUTE))
+                holder.view.txtDate.text = DateTimeUtil.correctDayAndMonth(calendarDateTime.get(Calendar.DAY_OF_MONTH), calendarDateTime.get(Calendar.MONTH), calendarDateTime.get(Calendar.YEAR))
+                holder.view.txtTime.text = DateTimeUtil.addLeadingZeroToTime(calendarDateTime.get(Calendar.HOUR_OF_DAY), calendarDateTime.get(Calendar.MINUTE))
+            }
         }
     }
 
@@ -104,7 +109,7 @@ class ItemAdapter(private val itemClickListener: (Long, Boolean) -> Unit, privat
     override fun getItemCount() = itemList.size
 
     override fun getItemId(position: Int): Long {
-        return itemList[position].id
+        return if (position <= itemList.size) itemList[position].id else NumberUtils.LONG_ZERO
     }
 
     fun setItemList(itemList: ArrayList<Item>) {
