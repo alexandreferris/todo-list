@@ -21,7 +21,7 @@ open class DBHelper(context: Context): SQLiteOpenHelper(context, DATABASE, null,
 
 
     companion object {
-        const val DATABASE = "TodoList.db"
-        const val DATABASE_VERSION = 5
+        const val DATABASE = "Organizr.db"
+        const val DATABASE_VERSION = 1
     }
 }

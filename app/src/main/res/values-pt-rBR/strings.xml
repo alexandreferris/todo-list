@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Todo List</string>
+    <string name="app_name">Organizr</string>
 
     <string name="lbl_title" translatable="false">Título</string>
     <string name="lbl_category" translatable="false">Categoria</string>

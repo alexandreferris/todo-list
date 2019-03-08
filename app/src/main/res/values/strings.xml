@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Todo List</string>
+    <string name="app_name">Organizr</string>
 
     <string name="lbl_title">Title</string>
     <string name="lbl_category">Category</string>
@@ -31,8 +31,8 @@
 
     <string name="lbl_completed">Completed</string>
 
-    <string name="lbl_no_uncompleted_todos">You don\'t have any TODOs\nAnything to add?</string>
-    <string name="lbl_no_completed_todos">You don\'t have any completed TODO\nAdd a new TODO to begin.</string>
+    <string name="lbl_no_uncompleted_todos">You don\'t have any Tasks\nAnything to add?</string>
+    <string name="lbl_no_completed_todos">You don\'t have any completed Task\nAdd a new Task to begin.</string>
 
     <string name="lbl_priority">Priority</string>
     <string name="lbl_priority_low">Low</string>
