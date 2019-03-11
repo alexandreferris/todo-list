@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+
+        <item name="android:fontFamily">@font/carme</item>
+    </style>
+
+    <!-- Checkbox White -->
+    <style name="checkboxWhite" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+
+    <!-- Date/Time Picker Dialog-->
+    <style name="pickerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="rbPriorityLow"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_low</item>
+        <item name="android:colorControlActivated">@color/priority_low</item>
+        <item name="android:colorControlHighlight">@color/priority_low</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_low</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityNormal"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_normal</item>
+        <item name="android:colorControlActivated">@color/priority_normal</item>
+        <item name="android:colorControlHighlight">@color/priority_normal</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_normal</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityImportant"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_important</item>
+        <item name="android:colorControlActivated">@color/priority_important</item>
+        <item name="android:colorControlHighlight">@color/priority_important</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_important</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+    <style name="rbPriorityCritical"> parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:colorControlNormal">@color/priority_critical</item>
+        <item name="android:colorControlActivated">@color/priority_critical</item>
+        <item name="android:colorControlHighlight">@color/priority_critical</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/priority_critical</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+
+</resources>

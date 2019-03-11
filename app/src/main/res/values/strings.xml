@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Organizr</string>
+
+    <string name="lbl_title">Title</string>
+    <string name="lbl_category">Category</string>
+    <string name="lbl_description">Description</string>
+
+    <string name="btn_save">Save</string>
+
+    <string name="error_save_item">Error!\nCouldn\'t save the item. Please try again.</string>
+    <string name="success_save_item">Success!\nItem saved!</string>
+
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="item_remove">Are you sure you want to remove:\n[item_name]?</string>
+    <string name="item_remove_replace">[item_name]</string>
+    <string name="success_remove_item">Success!\nItem removed.</string>
+    <string name="error_remove_item">Error!\nCouldn\'t remove the item. Please try again.</string>
+
+    <string name="lbl_item_edit">Edit</string>
+    <string name="confirm">Confirm</string>
+    <string name="lbl_item_edit_cancel">Cancel</string>
+
+    <string name="success_complete_item">Success!\nItem marked as completed.</string>
+    <string name="error_complete_item">Error!\nCouldn\'t mark the item as completed. Please try again.</string>
+
+    <string name="lbl_item_list_completed">Completed</string>
+    <string name="lbl_item_list_uncompleted">Uncompleted</string>
+
+    <string name="lbl_completed">Completed</string>
+
+    <string name="lbl_no_uncompleted_todos">You don\'t have any Tasks\nAnything to add?</string>
+    <string name="lbl_no_completed_todos">You don\'t have any completed Task\nAdd a new Task to begin.</string>
+
+    <string name="lbl_priority">Priority</string>
+    <string name="lbl_priority_low">Low</string>
+    <string name="lbl_priority_normal">Normal</string>
+    <string name="lbl_priority_important">Important</string>
+    <string name="lbl_priority_critical">Critical</string>
+
+    <string name="content_description_alarm_date">Icon for Date Alarm</string>
+    <string name="content_description_alarm_time">Icon for Time Alarm</string>
+
+    <string name="lbl_item_name" translatable="false">item_name</string>
+    <string name="lbl_item_category" translatable="false">item_category</string>
+    <string name="lbl_item_alarm_date" translatable="false">alarm_date</string>
+    <string name="lbl_item_alarm_time" translatable="false">alarm_time</string>
+
+    <string name="lbl_alarm_notification">Alarm Notification</string>
+
+    <string name="title_select_time">Select Time:</string>
+
+    <string name="field_error_title">Error!\nTitle should not be blank.</string>
+    <string name="field_error_category">Error\nCategory should not be blank.</string>
+</resources>

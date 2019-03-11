@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clItem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clItemCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
+
+        <TextView
+            android:id="@+id/txtItemStatusBG"
+            android:layout_width="28dp"
+            android:layout_height="match_parent" />
+
+        <CheckBox
+            android:id="@+id/chkCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/txtItemStatusBG"
+            app:layout_constraintEnd_toEndOf="@+id/txtItemStatusBG"
+            app:layout_constraintStart_toStartOf="@+id/txtItemStatusBG"
+            app:layout_constraintTop_toTopOf="@+id/txtItemStatusBG"
+            android:theme="@style/checkboxWhite" />
+
+        <TextView
+            android:id="@+id/txtItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/lbl_item_name"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintStart_toStartOf="@id/txtItemStatusBG"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtItemCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/lbl_item_category"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/ivDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/txtItemName"
+            app:srcCompat="@drawable/ic_date_calendar_gray_dark"
+            android:contentDescription="@string/content_description_alarm_date" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/lbl_item_alarm_date"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintBottom_toBottomOf="@+id/ivDate"
+            app:layout_constraintStart_toEndOf="@+id/ivDate"
+            app:layout_constraintTop_toTopOf="@+id/ivDate"
+            app:layout_constraintVertical_bias="0.666" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/ivTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:contentDescription="@string/content_description_alarm_time"
+            app:layout_constraintBottom_toBottomOf="@+id/txtDate"
+            app:layout_constraintStart_toEndOf="@+id/txtDate"
+            app:layout_constraintTop_toTopOf="@+id/txtDate"
+            app:srcCompat="@drawable/ic_clock_gray_dark" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/lbl_item_alarm_time"
+            android:textColor="@color/gray_dark"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTime"
+            app:layout_constraintStart_toEndOf="@+id/ivTime"
+            app:layout_constraintTop_toTopOf="@+id/ivTime" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

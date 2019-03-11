@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Organizr</string>
+
+    <string name="lbl_title" translatable="false">Título</string>
+    <string name="lbl_category" translatable="false">Categoria</string>
+    <string name="lbl_description" translatable="false">Descrição</string>
+
+    <string name="btn_save" translatable="false">Salvar</string>
+
+    <string name="error_save_item">Erro!\nNão foi possível salvar o item. Por favor tente novamente.</string>
+    <string name="success_save_item">Sucesso!\nItem salvo!</string>
+
+    <string name="ok">OK</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+
+    <string name="item_remove">Você tem certeza que quer remover:\n[item_name]?</string>
+    <string name="item_remove_replace">[item_name]</string>
+    <string name="success_remove_item">Sucesso!\nItem removido.</string>
+    <string name="error_remove_item">Erro!\nNão foi possível remover o item. Por favor tente novamente.</string>
+
+    <string name="lbl_item_edit">Editar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="lbl_item_edit_cancel">Cancelar</string>
+
+    <string name="success_complete_item">Sucesso!\nItem concluído.</string>
+    <string name="error_complete_item">Erro!\nNão foi possível marcar o Item como concluído. Por favor tente novamente.</string>
+
+    <string name="lbl_item_list_completed">Concluídos</string>
+    <string name="lbl_item_list_uncompleted">Incompletos</string>
+
+    <string name="lbl_completed">Concluídos</string>
+
+    <string name="lbl_no_uncompleted_todos">Você não possui nenhuma tarefa\nAlgo novo para adicionar?</string>
+    <string name="lbl_no_completed_todos">Você não possui nenhuma tarefa concluída\nAdicione uma tarefa para começar.</string>
+
+    <string name="lbl_priority">Prioridade</string>
+    <string name="lbl_priority_low">Baixa</string>
+    <string name="lbl_priority_normal">Normal</string>
+    <string name="lbl_priority_important">Importante</string>
+    <string name="lbl_priority_critical">Crítico</string>
+
+    <string name="content_description_alarm_date">Ícone para o alarme de data</string>
+    <string name="content_description_alarm_time">Ícone para o alarme de hora</string>
+
+    <string name="lbl_alarm_notification">Alarme de Notificação</string>
+
+    <string name="title_select_time">Selecione a Hora:</string>
+
+    <string name="field_error_title">Erro!\nTítulo não deve ser vazio.</string>
+    <string name="field_error_category">Erro!\nCategoria não deve ser vazia.</string>
+</resources>

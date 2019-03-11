@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#02D69F</color>
+    <color name="colorPrimaryDark">#02D69F</color>
+    <color name="colorAccent">#02D69F</color>
+
+    <!-- Priority -->
+    <color name="priority_low">#02D69F</color>
+    <color name="priority_normal">#197DAD</color>
+    <color name="priority_important">#FDCC5C</color>
+    <color name="priority_critical">#EF3A66</color>
+
+    <!-- Util -->
+    <color name="white">#FFFFFF</color>
+
+    <color name="gray_text">#797979</color>
+    <color name="gray">#CCCCCC</color>
+    <color name="gray_slight_dark">#AAAAAA</color>
+    <color name="gray_dark">#333333</color>
+</resources>
